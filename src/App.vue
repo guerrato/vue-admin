@@ -188,7 +188,6 @@
   <!-- /.content-wrapper -->
 
   <footer class="main-footer">
-    
   </footer>
 
   <!-- /.control-sidebar -->
@@ -206,5 +205,4 @@ export default {
 </script>
 
 <style>
-
 </style>
