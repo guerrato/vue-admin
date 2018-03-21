@@ -8,7 +8,9 @@
     </section>
 
     <section class="content">
-
+      <v-box>
+        <v-table id="example1"></v-table>
+      </v-box>
     </section>
   </div>
 </template>

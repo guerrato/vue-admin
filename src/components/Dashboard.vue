@@ -8,7 +8,6 @@
     </section>
 
     <section class="content">
-
     </section>
   </div>
 </template>

@@ -3,16 +3,22 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import { store } from './store'
 import Box from './components/Shared/Box'
+import Alert from './components/Shared/Alert'
+import Table from './components/Shared/Table'
 
 Vue.config.productionTip = false
 
-Vue.component('box', Box)
+Vue.component('v-box', Box)
+Vue.component('v-alert', Alert)
+Vue.component('v-table', Table)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
