@@ -1,39 +1,18 @@
 <template>
-  <table :id="id" class="table table-bordered table-striped">
+  <table :id="id" class="table table-bordered table-striped" :rows="rows">
     <thead>
       <tr>
-        <th>Rendering engine</th>
-        <th>Browser</th>
-        <th>Platform(s)</th>
-        <th>Engine version</th>
-        <th>CSS grade</th>
+        <th v-for="row in this.header" :key="row.key">{{row.label}}</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Trident</td>
-        <td>Internet Explorer 4.0
-        </td>
-        <td>Win 95+</td>
-        <td> 4</td>
-        <td>X</td>
-      </tr>
-      <tr>
-        <td>Trident</td>
-        <td>Internet Explorer 5.0
-        </td>
-        <td>Win 95+</td>
-        <td>5</td>
-        <td>C</td>
+      <tr v-for="row in rows" :key="row.id">
+        <td v-for="(item, index) in row" :item="item" :index="index" :key="item">{{ item }}</td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
-        <th>Rendering engine</th>
-        <th>Browser</th>
-        <th>Platform(s)</th>
-        <th>Engine version</th>
-        <th>CSS grade</th>
+        <th v-for="row in this.header" :key="row.key">{{row.label}}</th>
       </tr>
     </tfoot>
   </table>
@@ -42,8 +21,14 @@
 <script>
 export default {
   props: [
-    'id'
+    'id',
+    'header'
   ],
+  computed: {
+    rows () {
+      return this.$store.getters.loadedMembers
+    }
+  },
   mounted () {
     $(this.$el).DataTable()
   }
