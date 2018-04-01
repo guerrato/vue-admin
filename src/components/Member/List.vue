@@ -9,7 +9,7 @@
 
     <section class="content">
       <v-box>
-        <v-table id="example1" :header="header" :rows="members"></v-table>
+        <v-table id="example1" :columns="columns" :rows="members"></v-table>
       </v-box>
     </section>
   </div>
@@ -19,43 +19,44 @@
 export default {
   data () {
     return {
-      header: [
+      columns: [
         {
           key: 'id',
-          label: 'ID',
-          oderable: true
+          label: 'ID'
         },
         {
-          key: 'rendering',
-          label: 'Rendering engine',
-          oderable: true
+          key: 'name',
+          label: 'Nome'
         },
         {
-          key: 'browser',
-          label: 'The Browser',
-          oderable: true
+          key: 'nickname',
+          label: 'Apelido'
         },
         {
-          key: 'platform',
-          label: 'Platform(s)',
-          oderable: true
-        },
-        {
-          key: 'engine',
-          label: 'Engine version',
-          oderable: true
-        },
-        {
-          key: 'css',
-          label: 'CSS grade',
-          oderable: true
+          key: 'actions',
+          label: ''
         }
       ]
     }
   },
+  created () {
+    return this.$store.dispatch('loadMembers')
+  },
   computed: {
     members () {
-      return this.$store.dispatch('loadMembers')
+      let result = []
+      let data = this.$store.getters.loadedMembers
+
+      data.forEach(el => {
+        result.push({
+          id: el.id,
+          name: el.name,
+          nickname: el.nickname,
+          actions: ''
+        })
+      })
+
+      return result
     }
   }
 }

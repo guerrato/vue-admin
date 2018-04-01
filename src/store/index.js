@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import axios from 'axios'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -18,70 +18,33 @@ export const store = new Vuex.Store({
   },
   actions: {
     loadMembers ({commit}) {
-      // axios.get('//ironhand.ludlum.lo/api/member')
-      //   .then((response) => {
-      //     const members = []
-      //     const obj = response.data.data
+      axios.get('//ironhand.ludlum.lo/api/member')
+        .then((response) => {
+          const members = []
+          const obj = response.data.data
 
-      //     for (let key in obj) {
-      //       members.push({
-      //         id: key,
-      //         name: obj[key].name,
-      //         email: obj[key].email,
-      //         nickname: obj[key].nickname,
-      //         birthdate: obj[key].birthdate,
-      //         gender: obj[key].gender,
-      //         phone: obj[key].phone,
-      //         whatsapp: obj[key].whatsapp,
-      //         facebook: obj[key].facebook,
-      //         role: obj[key].role,
-      //         status: obj[key].status,
-      //         image: obj[key].image
-      //       })
-      //     }
+          for (let key in obj) {
+            members.push({
+              id: key,
+              name: obj[key].name,
+              email: obj[key].email,
+              nickname: obj[key].nickname,
+              birthdate: obj[key].birthdate,
+              gender: obj[key].gender,
+              phone: obj[key].phone,
+              whatsapp: obj[key].whatsapp,
+              facebook: obj[key].facebook,
+              role: obj[key].role,
+              status: obj[key].status,
+              image: obj[key].image
+            })
+          }
 
-      //     commit('setLoadedMembers', members)
-      //   })
-      //   .catch((error) => {
-      //     console.log(error)
-      //   })
-
-      let members = [
-        {
-          id: 1,
-          rendering: 'Trident',
-          browser: 'Internet Explorer 5.0',
-          platform: 'Win 95+',
-          engine: '5',
-          css: 'C'
-        },
-        {
-          id: 2,
-          rendering: 'Trident',
-          browser: 'Internet Explorer 4.0',
-          platform: 'Win 95+',
-          engine: '4',
-          css: 'X'
-        },
-        {
-          id: 3,
-          rendering: 'Webkit',
-          browser: 'Chrome',
-          platform: 'Mac OS',
-          engine: '10',
-          css: 'Z'
-        },
-        {
-          id: 4,
-          rendering: 'Webkit',
-          browser: 'Safari',
-          platform: 'Mac OS',
-          engine: '10',
-          css: 'Z'
-        }
-      ]
-
-      commit('setLoadedMembers', members)
+          commit('setLoadedMembers', members)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
     createMember ({commit, getters}, payload) {
       // const member = {

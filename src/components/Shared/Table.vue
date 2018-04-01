@@ -2,7 +2,7 @@
   <table :id="id" class="table table-bordered table-striped" :rows="rows">
     <thead>
       <tr>
-        <th v-for="row in this.header" :key="row.key">{{row.label}}</th>
+        <th v-for="row in this.columns" :key="row.key">{{row.label}}</th>
       </tr>
     </thead>
     <tbody>
@@ -12,7 +12,7 @@
     </tbody>
     <tfoot>
       <tr>
-        <th v-for="row in this.header" :key="row.key">{{row.label}}</th>
+        <th v-for="row in this.columns" :key="row.key">{{row.label}}</th>
       </tr>
     </tfoot>
   </table>
@@ -22,14 +22,12 @@
 export default {
   props: [
     'id',
-    'header'
+    'columns',
+    'rows'
   ],
   computed: {
-    rows () {
-      return this.$store.getters.loadedMembers
-    }
   },
-  mounted () {
+  updated () {
     $(this.$el).DataTable()
   }
 }
