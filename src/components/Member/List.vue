@@ -9,7 +9,7 @@
 
     <section class="content">
       <v-box>
-        <v-table id="example1" :columns="columns" :table-data="members"></v-table>
+        <v-table id="dtmembers" :columns="columns" :rows="members" :options="options"></v-table>
       </v-box>
     </section>
   </div>
@@ -34,9 +34,13 @@ export default {
         },
         {
           data: 'actions',
-          title: ''
+          title: '',
+          orderable: false
         }
-      ]
+      ],
+      options: {
+        searching: true
+      }
     }
   },
   created () {

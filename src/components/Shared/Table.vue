@@ -7,36 +7,28 @@ export default {
   props: [
     'id',
     'columns',
-    'tableData',
+    'rows',
     'options'
   ],
   data () {
     return {
-      rows: [],
       dtHandle: null
     }
   },
   watch: {
-    tableData (val, oldVal) {
-      this.rows = []
-
-      val.forEach(item => {
-        this.rows.push(item)
-      })
-
+    rows (val, oldVal) {
       this.dtHandle.clear()
       this.dtHandle.rows.add(this.rows)
       this.dtHandle.draw()
     }
   },
   mounted () {
-    this.dtHandle = $(this.$el).DataTable({
-      columns: this.columns,
-      data: this.rows
-      // searching: false,
-      // paging: true,
-      // info: false
-    })
+    let dtOptions = this.options
+
+    dtOptions.columns = this.columns
+    dtOptions.data = this.rows
+
+    this.dtHandle = $(this.$el).DataTable(dtOptions)
   }
 }
 </script>

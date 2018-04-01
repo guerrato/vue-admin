@@ -23,22 +23,22 @@ export const store = new Vuex.Store({
           const members = []
           const obj = response.data.data
 
-          for (let key in obj) {
+          obj.forEach(item => {
             members.push({
-              id: key,
-              name: obj[key].name,
-              email: obj[key].email,
-              nickname: obj[key].nickname,
-              birthdate: obj[key].birthdate,
-              gender: obj[key].gender,
-              phone: obj[key].phone,
-              whatsapp: obj[key].whatsapp,
-              facebook: obj[key].facebook,
-              role: obj[key].role,
-              status: obj[key].status,
-              image: obj[key].image
+              id: item.id,
+              name: item.name,
+              email: item.email,
+              nickname: item.nickname,
+              birthdate: item.birthdate,
+              gender: item.gender,
+              phone: item.phone,
+              whatsapp: item.whatsapp,
+              facebook: item.facebook,
+              role: item.role,
+              status: item.status,
+              image: item.image
             })
-          }
+          })
 
           commit('setLoadedMembers', members)
         })
