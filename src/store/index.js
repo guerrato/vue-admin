@@ -6,11 +6,15 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    members: []
+    members: [],
+    ministries: []
   },
   mutations: {
     setLoadedMembers (state, payload) {
       state.members = payload
+    },
+    setLoadedMinistries (state, payload) {
+      state.ministries = payload
     },
     createMeetup (state, payload) {
       state.members.push(payload)
@@ -41,6 +45,27 @@ export const store = new Vuex.Store({
           })
 
           commit('setLoadedMembers', members)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    loadMinistries ({commit}) {
+      axios.get('//ironhand.ludlum.lo/api/ministry')
+        .then((response) => {
+          const ministries = []
+          const obj = response.data.data
+
+          obj.forEach(item => {
+            ministries.push({
+              id: item.id,
+              name: item.name,
+              description: item.description,
+              coordinator: item.coordinator.name
+            })
+          })
+
+          commit('setLoadedMinistries', ministries)
         })
         .catch((error) => {
           console.log(error)
@@ -96,6 +121,11 @@ export const store = new Vuex.Store({
     loadedMembers (state) {
       return state.members.sort((memberA, memberB) => {
         return memberA.id > memberB.id
+      })
+    },
+    loadedMinistries (state) {
+      return state.ministries.sort((ministryA, ministryB) => {
+        return ministryA.id > ministryB.id
       })
     }
   }
