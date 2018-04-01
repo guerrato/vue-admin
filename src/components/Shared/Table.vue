@@ -1,21 +1,5 @@
 <template>
-  <table :id="id" class="table table-bordered table-striped" :rows="rows">
-    <thead>
-      <tr>
-        <th v-for="row in this.columns" :key="row.key">{{row.label}}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="row in rows" :key="row.id">
-        <td v-for="(item, index) in row" :item="item" :index="index" :key="item">{{ item }}</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <th v-for="row in this.columns" :key="row.key">{{row.label}}</th>
-      </tr>
-    </tfoot>
-  </table>
+  <table :id="id" class="table table-bordered table-striped"></table>
 </template>
 
 <script>
@@ -23,12 +7,36 @@ export default {
   props: [
     'id',
     'columns',
-    'rows'
+    'tableData',
+    'options'
   ],
-  computed: {
+  data () {
+    return {
+      rows: [],
+      dtHandle: null
+    }
   },
-  updated () {
-    $(this.$el).DataTable()
+  watch: {
+    tableData (val, oldVal) {
+      this.rows = []
+
+      val.forEach(item => {
+        this.rows.push(item)
+      })
+
+      this.dtHandle.clear()
+      this.dtHandle.rows.add(this.rows)
+      this.dtHandle.draw()
+    }
+  },
+  mounted () {
+    this.dtHandle = $(this.$el).DataTable({
+      columns: this.columns,
+      data: this.rows
+      // searching: false,
+      // paging: true,
+      // info: false
+    })
   }
 }
 </script>

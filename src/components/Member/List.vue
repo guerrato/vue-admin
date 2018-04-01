@@ -9,7 +9,7 @@
 
     <section class="content">
       <v-box>
-        <v-table id="example1" :columns="columns" :rows="members"></v-table>
+        <v-table id="example1" :columns="columns" :table-data="members"></v-table>
       </v-box>
     </section>
   </div>
@@ -21,20 +21,20 @@ export default {
     return {
       columns: [
         {
-          key: 'id',
-          label: 'ID'
+          data: 'id',
+          title: 'ID'
         },
         {
-          key: 'name',
-          label: 'Nome'
+          data: 'name',
+          title: 'Nome'
         },
         {
-          key: 'nickname',
-          label: 'Apelido'
+          data: 'nickname',
+          title: 'Apelido'
         },
         {
-          key: 'actions',
-          label: ''
+          data: 'actions',
+          title: ''
         }
       ]
     }
