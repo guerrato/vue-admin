@@ -170,10 +170,10 @@
           </div>
           <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MENU PRINCIPAL</li>
-            <li><a href="/"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-            <li><a href="/member"><i class="fa fa-user"></i> <span>Members</span></a></li>
-            <li><a href="/group"><i class="fa fa-group"></i> <span>Groups</span></a></li>
-            <li><a href="/ministry"><i class="fa fa-university"></i> <span>Ministries</span></a></li>
+            <li><router-link to="/"><i class="fa fa-dashboard"></i> <span>Dashboard</span></router-link></li>
+            <li><router-link to="/member"><i class="fa fa-user"></i> <span>Members</span></router-link></li>
+            <li><router-link to="/group"><i class="fa fa-group"></i> <span>Groups</span></router-link></li>
+            <li><router-link to="/ministry"><i class="fa fa-university"></i> <span>Ministries</span></router-link></li>
           </ul>
         </section>
         <!-- /.sidebar -->

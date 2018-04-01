@@ -9,6 +9,11 @@
 
     <section class="content">
       <v-box>
+        <div class="row form-group">
+          <div class="col-xs-2">
+            <router-link class="btn btn-primary" to="/member/create">Adicionar Novo</router-link>
+          </div>
+        </div>
         <v-table id="dtmembers" :columns="columns" :rows="members" :options="options"></v-table>
       </v-box>
     </section>
