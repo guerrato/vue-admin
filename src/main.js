@@ -7,12 +7,14 @@ import { store } from './store'
 import Box from './components/Shared/Box'
 import Alert from './components/Shared/Alert'
 import Table from './components/Shared/Table'
+import Crop from './components/Shared/Crop'
 
 Vue.config.productionTip = false
 
 Vue.component('v-box', Box)
 Vue.component('v-alert', Alert)
 Vue.component('v-table', Table)
+Vue.component('v-crop', Crop)
 
 /* eslint-disable no-new */
 new Vue({

@@ -75,25 +75,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <div class="row">
-                <div class="form-group col-xs-12">
-                  <label for="image">Foto:</label>
-                  <div class="input-group">
-                    <div class="input-group-btn">
-                      <label for="image" class="btn btn-primary"><i class="fa fa-upload"></i> Escolher Foto</label>
-                    </div>
-                    <input type="text" class="form-control" v-model="imageUrl" disabled>
-                    <div class="input-group-btn" v-if="image">
-                      <button type="button" class="btn btn-danger" @click="clearImage"><i class="fa fa-trash"></i> Remover</button>
-                    </div>
-                  </div>
-                  <input class="hidden-element" type="file" id="image" @change="previewImage" accept="image/*">
-                </div>
-                <div class="form-group col-xs-12">
-                  <label for="image">Visualização</label>
-                  <div class="input-group form-control preview" :style="{ 'background-image': 'url(' + image + ')' }"></div>
-                </div>
-              </div>
+              <v-crop crop-title="Picture" btn-upload="Choose pic" btnRemove="Remove Pic" previewTitle="Preview"></v-crop>
             </div>
           </div>
           <div class="box-footer">
@@ -207,19 +189,3 @@ export default {
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  .hidden-element {
-    display: none;
-  }
-  .preview {
-    height: 385px;
-    background-repeat: no-repeat;
-    background-position: center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-</style>
