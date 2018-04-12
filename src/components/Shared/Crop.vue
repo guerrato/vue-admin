@@ -15,7 +15,21 @@
     </div>
     <div class="form-group col-xs-12">
       <label for="image">{{ previewTitle }}</label>
-      <div class="input-group form-control preview" :style="{ 'background-image': 'url(' + image + ')' }"></div>
+      <div class="input-group form-control preview-wrap">
+        <croppa class="preview" v-model="croppa"
+          auto-sizing
+          :placeholder="previewTitle"
+          :placeholder-font-size="0"
+          :disabled="false"
+          :disable-drag-and-drop="true"
+          :disable-click-to-choose="true"
+          :disable-rotation="true"
+          :prevent-white-space="true"
+          :show-remove-button="false"
+          :zoom-speed="5"
+          initial-size="cover"
+          :initial-image="image"></croppa>
+      </div>
     </div>
   </div>
 </template>
@@ -31,8 +45,16 @@ export default {
   data () {
     return {
       imageUrl: null,
-      image: null
+      image: null,
+      croppa: {}
     }
+  },
+  mounted () {
+    let img = new Image()
+    this.imageUrl = img.src && img.src !== '' && img.src !== null ? img.src : null
+    img.setAttribute('crossorigin', 'anonymous')
+    this.image = img.src && img.src !== '' && img.src !== null ? img.src : null
+    this.croppa.refresh()
   },
   methods: {
     previewImage: function (event) {
@@ -42,6 +64,7 @@ export default {
         reader.onload = (e) => {
           this.imageUrl = input.value
           this.image = e.target.result
+          this.croppa.refresh()
         }
         reader.readAsDataURL(input.files[0])
       }
@@ -49,7 +72,7 @@ export default {
     clearImage: function () {
       this.image = null
       this.imageUrl = null
-
+      this.croppa.refresh()
       return false
     }
   }
@@ -61,13 +84,18 @@ export default {
   .hidden-element {
     display: none;
   }
-  .preview {
-    height: 385px;
-    background-repeat: no-repeat;
-    background-position: center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+  .preview-wrap {
+    padding: 0;
+    max-width: 360px;
+    height: 360px;
+  }
+  .croppa-container.preview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
   }
 </style>
