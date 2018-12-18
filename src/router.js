@@ -1,19 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Dashboard from '@/components/Dashboard'
-import ListMember from '@/components/Member/List'
-import CreateMember from '@/components/Member/Create'
-import EditMember from '@/components/Member/Edit'
-import ListMinistry from '@/components/Ministry/List'
-import CreateMinistry from '@/components/Ministry/Create'
-import EditMinistry from '@/components/Ministry/Edit'
-import ListGroup from '@/components/Group/List'
-import CreateGroup from '@/components/Group/Create'
-import EditGroup from '@/components/Group/Edit'
+import Dashboard from '@/views/Dashboard'
+import ListMember from '@/views/Member/List'
+import CreateMember from '@/views/Member/Create'
+import EditMember from '@/views/Member/Edit'
+import ListMinistry from '@/views/Ministry/List'
+import CreateMinistry from '@/views/Ministry/Create'
+import EditMinistry from '@/views/Ministry/Edit'
+import ListGroup from '@/views/Group/List'
+import CreateGroup from '@/views/Group/Create'
+import EditGroup from '@/views/Group/Edit'
 
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
+  base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
@@ -65,6 +67,6 @@ export default new Router({
       name: 'EditGroup',
       component: EditGroup
     }
-  ],
-  mode: 'history'
+  ]
 })
+

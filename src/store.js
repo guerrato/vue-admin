@@ -21,7 +21,7 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
-    loadMembers ({commit}) {
+    loadMembers ({ commit }) {
       axios.get('//ironhand.ludlum.lo/api/member')
         .then((response) => {
           const members = []
@@ -50,7 +50,7 @@ export const store = new Vuex.Store({
           console.log(error)
         })
     },
-    loadMinistries ({commit}) {
+    loadMinistries ({ commit }) {
       axios.get('//ironhand.ludlum.lo/api/ministry')
         .then((response) => {
           const ministries = []
@@ -71,7 +71,7 @@ export const store = new Vuex.Store({
           console.log(error)
         })
     },
-    createMember ({commit, getters}, payload) {
+    createMember ({ commit, getters }, payload) {
       // const member = {
       //   name: payload.name,
       //   email: payload.email,
