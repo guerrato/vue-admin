@@ -11,7 +11,7 @@
           <button type="button" class="btn btn-danger" @click="clearImage"><i class="fa fa-trash"></i> {{ btnRemove }}</button>
         </div>
       </div>
-      <input class="hidden-element" type="file" id="image" @change="previewImage" accept="image/*">
+      <input class="hidden-element" type="file" id="image" @change="onFileChange" accept="image/*">
     </div>
     <div class="form-group col-xs-12">
       <label for="image">{{ previewTitle }}</label>
@@ -44,8 +44,8 @@ export default {
   ],
   data () {
     return {
-      imageUrl: null,
-      image: null,
+      imageUrl: '',
+      image: '',
       croppa: {}
     }
   },
@@ -57,23 +57,29 @@ export default {
     this.croppa.refresh()
   },
   methods: {
-    previewImage: function (event) {
-      var input = event.target
-      if (input.files && input.files[0]) {
-        var reader = new FileReader()
-        reader.onload = (e) => {
-          this.imageUrl = input.value
-          this.image = e.target.result
-          this.croppa.refresh()
-        }
-        reader.readAsDataURL(input.files[0])
+    onFileChange (e) {
+      var files = e.target.files || e.dataTransfer.files
+      if (!files.length) {
+        return
       }
+      this.createImage(files[0])
+    },
+    createImage (file) {
+      var reader = new FileReader()
+      var input = event.target
+
+      reader.onload = (e) => {
+        this.imageUrl = input.value
+        this.image = e.target.result
+        this.croppa.refresh()
+      }
+      reader.readAsDataURL(file)
     },
     clearImage: function () {
-      this.image = null
-      this.imageUrl = null
+      this.image = ''
+      this.imageUrl = ''
+      document.getElementById('image').value = ''
       this.croppa.refresh()
-      return false
     }
   }
 }
