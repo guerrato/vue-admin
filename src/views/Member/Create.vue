@@ -29,7 +29,7 @@
               <div class="row">
                 <div class="form-group col-md-6 col-lg-4">
                   <label for="nickname">Apelido:</label>
-                  <input type="text" class="form-control" id="nickname" v-model="nickname" placeholder="Nome">
+                  <input type="text" class="form-control" id="nickname" v-model="nickname" placeholder="Apelido">
                 </div>
                 <div class="form-group col-md-6 col-lg-4">
                   <label for="birthdate">Nascido em:</label>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="form-group col-md-6 col-lg-4">
                   <label>Gênero:</label>
-                  <select class="form-control select2" id="gender" v-model="gender" data-value="" style="width: 100%;" data-placeholder="Selecione...">
+                  <select class="form-control select2" id="gender" v-model="gender" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="gender">
                     <option value="male">Masculo</option>
                     <option value="female">Feminino</option>
                   </select>
@@ -58,7 +58,7 @@
                 </div>
                 <div class="form-group col-md-6">
                   <label>Responsabilidade:</label>
-                  <select class="form-control select2" id="role" v-model="role" data-value="" style="width: 100%;" data-placeholder="Selecione...">
+                  <select class="form-control select2" id="role" v-model="role" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="role">
                     <option value="member">Membro</option>
                     <option value="coordinator">Coordenador</option>
                     <option value="administator">Administrador</option>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="form-group col-md-6">
                   <label>Status:</label>
-                  <select class="form-control select2" id="status" v-model="status" data-value="" style="width: 100%;" data-placeholder="Selecione...">
+                  <select class="form-control select2" id="status" v-model="status" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="status">
                     <option value="activated">Ativo</option>
                     <option value="traveling">Viajando</option>
                     <option value="transfered">Transferido</option>
@@ -75,7 +75,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <v-crop crop-title="Picture" btn-upload="Choose pic" btnRemove="Remove Pic" previewTitle="Preview"></v-crop>
+              <v-crop crop-title="Picture" btn-upload="Choose pic" btnRemove="Remove Pic" previewTitle="Preview" ref="croppa"></v-crop>
             </div>
           </div>
           <div class="box-footer">
@@ -115,12 +115,12 @@ export default {
     }
   },
   methods: {
-    checkForm: function (e) {
-      this.gender = $('#gender').attr('data-value')
-      this.role = $('#role').attr('data-value')
-      this.status = $('#status').attr('data-value')
+    checkForm: function () {
+      this.gender = this.$refs.gender.dataset.value
+      this.role = this.$refs.role.dataset.value
+      this.status = this.$refs.status.dataset.value
 
-      if (this.name && this.gender && this.roles && this.statuss) {
+      if (this.name && this.gender && this.role && this.status) {
         return true
       }
 
@@ -141,50 +141,32 @@ export default {
       if (!this.status) {
         this.errors.push('Status requerido.')
       }
-
-      e.preventDefault()
     },
     submitForm (e) {
-      // if (!this.checkForm(e)) {
-      //   return
-      // }
-
       e.preventDefault()
-      // const memberData = {
-      //   name: this.name,
-      //   email: this.email,
-      //   nickname: this.nickname,
-      //   birthdate: this.birthdate,
-      //   gender: this.gender,
-      //   phone: this.phone,
-      //   whatsapp: this.whatsapp,
-      //   facebook: this.facebook,
-      //   role: this.role,
-      //   status: this.status,
-      //   imageUrl: this.imageUrl,
-      //   image: this.image
-      // }
 
-      console.log(this.$store.dispatch('loadMembers'))
-      // this.$store.dispatch('createMember', memberData)
-      // this.$router.push('/member')
-    },
-    previewImage: function (event) {
-      var input = event.target
-      if (input.files && input.files[0]) {
-        var reader = new FileReader()
-        reader.onload = (e) => {
-          this.imageUrl = input.value
-          this.image = e.target.result
-        }
-        reader.readAsDataURL(input.files[0])
+      if (!this.checkForm()) {
+        return
       }
-    },
-    clearImage: function () {
-      this.image = null
-      this.imageUrl = null
 
-      return false
+      const memberData = {
+        name: this.name,
+        email: this.email,
+        nickname: this.nickname,
+        birthdate: this.birthdate,
+        gender: this.gender,
+        phone: this.phone,
+        whatsapp: this.whatsapp,
+        facebook: this.facebook,
+        role: this.role,
+        status: this.status,
+        imageUrl: this.$refs.croppa.getImageName(),
+        image: this.$refs.croppa.getCroppedImage()
+      }
+      console.log(memberData)
+      console.log(this.$store.dispatch('loadMembers'))
+      this.$store.dispatch('createMember', memberData)
+      // this.$router.push('/member')
     }
   }
 }

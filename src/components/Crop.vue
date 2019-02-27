@@ -44,8 +44,8 @@ export default {
   ],
   data () {
     return {
-      imageUrl: '',
-      image: '',
+      imageUrl: null,
+      image: null,
       croppa: {}
     }
   },
@@ -76,16 +76,21 @@ export default {
       reader.readAsDataURL(file)
     },
     clearImage: function () {
-      this.image = ''
-      this.imageUrl = ''
+      this.image = null
+      this.imageUrl = null
       document.getElementById('image').value = ''
       this.croppa.refresh()
+    },
+    getCroppedImage: function () {
+      return this.croppa.generateDataUrl()
+    },
+    getImageName: function () {
+      return this.imageUrl.replace(/^.*[\\/]/, '')
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .hidden-element {
     display: none;
