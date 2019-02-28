@@ -110,7 +110,7 @@ export default {
       facebook: null,
       role: null,
       status: null,
-      imageUrl: null,
+      image_name: null,
       image: null
     }
   },
@@ -160,7 +160,7 @@ export default {
         facebook: this.facebook,
         role: this.role,
         status: this.status,
-        imageUrl: this.$refs.croppa.getImageName(),
+        image_name: this.$refs.croppa.getImageName(),
         image: this.$refs.croppa.getCroppedImage()
       }
       console.log(memberData)

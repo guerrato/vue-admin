@@ -40,7 +40,8 @@ export const store = new Vuex.Store({
               facebook: item.facebook,
               role: item.role,
               status: item.status,
-              image: item.image
+              image: item.image,
+              image_name: item.image_name
             })
           })
 
