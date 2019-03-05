@@ -40,7 +40,7 @@
                 <div class="form-group col-md-6 col-lg-4">
                   <label>Gênero:</label>
                   <select class="form-control select2" id="gender" v-model="gender" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="gender">
-                    <option value="male">Masculo</option>
+                    <option value="male">Masculino</option>
                     <option value="female">Feminino</option>
                   </select>
                 </div>
@@ -59,17 +59,17 @@
                 <div class="form-group col-md-6">
                   <label>Responsabilidade:</label>
                   <select class="form-control select2" id="role" v-model="role" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="role">
-                    <option value="member">Membro</option>
-                    <option value="coordinator">Coordenador</option>
-                    <option value="administator">Administrador</option>
+                    <option v-for="rl in member_roles" v-bind:key="rl.id" v-bind:value="rl.id">
+                      {{ rl.description }}
+                    </option>
                   </select>
                 </div>
                 <div class="form-group col-md-6">
                   <label>Status:</label>
                   <select class="form-control select2" id="status" v-model="status" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="status">
-                    <option value="activated">Ativo</option>
-                    <option value="traveling">Viajando</option>
-                    <option value="transfered">Transferido</option>
+                    <option v-for="st in member_status" v-bind:key="st.id" v-bind:value="st.id">
+                      {{ st.description }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -88,14 +88,6 @@
 </template>
 
 <script>
-$(function () {
-  $('.select2').select2().on('select2:select', function (e) {
-    $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
-  })
-
-  $('#birthdate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-})
-
 export default {
   data () {
     return {
@@ -112,6 +104,45 @@ export default {
       status: null,
       image_name: null,
       image: null
+    }
+  },
+  mounted () {
+    $(document).ready(() => {
+      $('.select2').select2().on('select2:select', function (e) {
+        $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
+      })
+
+      $('#birthdate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+      $('#birthdate').focusout(() => {
+        this.birthdate = $('#birthdate').val()
+      })
+    })
+  },
+  created () {
+    this.$store.dispatch('loadMemberRolesByHierarchy')
+    this.$store.dispatch('loadMemberStatus')
+    return true
+  },
+  computed: {
+    member_roles () {
+      let result = []
+      let data = this.$store.getters.loadedMemberRoles
+
+      data.map(el => {
+        result.push(el)
+      })
+
+      return result
+    },
+    member_status () {
+      let result = []
+      let data = this.$store.getters.loadedMemberStatus
+
+      data.map(el => {
+        result.push(el)
+      })
+
+      return result
     }
   },
   methods: {
@@ -158,13 +189,12 @@ export default {
         phone: this.phone,
         whatsapp: this.whatsapp,
         facebook: this.facebook,
-        role: this.role,
-        status: this.status,
+        role_id: this.role,
+        status_id: this.status,
         image_name: this.$refs.croppa.getImageName(),
         image: this.$refs.croppa.getCroppedImage()
       }
-      console.log(memberData)
-      console.log(this.$store.dispatch('loadMembers'))
+
       this.$store.dispatch('createMember', memberData)
       // this.$router.push('/member')
     }
