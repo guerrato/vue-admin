@@ -9,9 +9,9 @@
 
     <section class="content">
       <v-box>
-        <v-alert title="Erros!" type="danger" dismissible v-if="errors.length">
-          Por favor, corrija os seguintes erros:
-          <ul>
+        <v-alert :title="alert.title" :type="alert.type" v-if="alert.message">
+          <p>{{ alert.message }}</p>
+          <ul v-if="errors.length">
             <li v-for="error in errors" :key="error">{{ error }}</li>
           </ul>
         </v-alert>
@@ -92,6 +92,11 @@ export default {
   data () {
     return {
       errors: [],
+      alert: {
+        title: null,
+        type: 'default',
+        message: null
+      },
       name: null,
       email: null,
       nickname: null,
@@ -172,6 +177,10 @@ export default {
       if (!this.status) {
         this.errors.push('Status requerido.')
       }
+
+      this.alert.title = 'Error!'
+      this.alert.type = 'danger'
+      this.alert.message = 'Errors were found. Please, solve them before proceed.'
     },
     submitForm (e) {
       e.preventDefault()
