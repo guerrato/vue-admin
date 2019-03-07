@@ -205,6 +205,33 @@ export default {
       }
 
       this.$store.dispatch('createMember', memberData)
+        .then(response => {
+          this.errors = []
+          this.alert.title = 'Success!'
+          this.alert.type = 'success'
+          this.alert.message = 'The member was included successfuly.'
+        }).catch(error => {
+          this.errors = []
+
+          if ('data' in error) {
+            if ('message' in error.data) {
+              Object.keys(error.data.message).map(key => {
+                error.data.message[key].map(err => {
+                  this.errors.push(err)
+                })
+              })
+            }
+          }
+
+          this.alert.title = 'Error!'
+          this.alert.type = 'danger'
+
+          if (this.errors.length) {
+            this.alert.message = 'Errors were found. Please, solve them before proceed.'
+          } else {
+            this.alert.message = 'Errors were found. Please, try later.'
+          }
+        })
       // this.$router.push('/member')
     }
   }

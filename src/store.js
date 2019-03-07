@@ -114,34 +114,36 @@ export const store = new Vuex.Store({
         })
     },
     createMember ({ commit, getters }, payload) {
-      const member = {
-        name: payload.name,
-        email: payload.email,
-        nickname: payload.nickname,
-        birthdate: payload.birthdate,
-        gender: payload.gender,
-        phone: payload.phone,
-        whatsapp: payload.whatsapp,
-        facebook: payload.facebook,
-        role_id: payload.role_id,
-        status_id: payload.status_id,
-        image: payload.image,
-        image_name: payload.image_name
-      }
-
-      if (member.birthdate != null) {
-        if (member.birthdate.trim() !== '') {
-          member.birthdate = member.birthdate.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')
+      return new Promise((resolve, reject) => {
+        const member = {
+          name: payload.name,
+          email: payload.email,
+          nickname: payload.nickname,
+          birthdate: payload.birthdate,
+          gender: payload.gender,
+          phone: payload.phone,
+          whatsapp: payload.whatsapp,
+          facebook: payload.facebook,
+          role_id: payload.role_id,
+          status_id: payload.status_id,
+          image: payload.image,
+          image_name: payload.image_name
         }
-      }
 
-      axios.post(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member`, member)
-        .then(function (response) {
-          console.log(response)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+        if (member.birthdate != null) {
+          if (member.birthdate.trim() !== '') {
+            member.birthdate = member.birthdate.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')
+          }
+        }
+
+        axios.post(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member`, member)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
     }
   },
   getters: {
