@@ -85,6 +85,9 @@ export default {
       return this.croppa.generateDataUrl()
     },
     getImageName: function () {
+      if (this.imageUrl == null) {
+        return null
+      }
       return this.imageUrl.replace(/^.*[\\/]/, '')
     }
   }
