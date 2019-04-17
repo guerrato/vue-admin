@@ -33,7 +33,8 @@ export default new Router({
       component: CreateMember
     },
     {
-      path: '/member/edit',
+      path: '/member/edit/:id',
+      props: true,
       name: 'EditMember',
       component: EditMember
     },
