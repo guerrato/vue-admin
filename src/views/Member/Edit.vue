@@ -19,7 +19,7 @@
           <div class="box-body">
             <div class="form-group col-md-6">
               <label for="name">Nome Completo:</label>
-              <input type="text" class="form-control" id="name" :member="member.name" placeholder="Nome">
+              <input type="text" class="form-control" id="name" v-model="name" placeholder="Nome">
             </div>
             <div class="form-group col-md-6">
               <label for="email">E-mail:</label>
@@ -75,7 +75,7 @@
               </div>
             </div>
             <div class="col-md-6">
-              <v-crop crop-title="Picture" btn-upload="Choose pic" btnRemove="Remove Pic" previewTitle="Preview" ref="croppa"></v-crop>
+              <v-crop crop-title="Picture" btn-upload="Choose pic" btnRemove="Remove Pic" previewTitle="Preview" :storedName="image_name" :storedImage="image" ref="croppa"></v-crop>
             </div>
           </div>
           <div class="box-footer">
@@ -88,6 +88,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data () {
     return {
@@ -111,24 +113,29 @@ export default {
       image: null
     }
   },
+  watch: {
+    member (val, original) {
+      this.name = val.name
+      this.email = val.email
+      this.nickname = val.nickname
+      this.birthdate = val.birthdate
+      this.gender = val.gender
+      this.phone = val.phone
+      this.whatsapp = val.whatsapp
+      this.facebook = val.facebook
+      this.role = val.role_id
+      this.status = val.status_id
+      this.image_name = val.image_name
+      this.image = `${process.env.VUE_APP_IRONHAND_BASE_URL}/storage${val.image}`
+    }
+  },
   mounted () {
-    $(document).ready(() => {
-      $('.select2').select2().on('select2:select', function (e) {
-        $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
-      })
-
-      $('#birthdate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-      $('#birthdate').focusout(() => {
-        this.birthdate = $('#birthdate').val()
-      })
-    })
+    this.handleSelect()
   },
   created () {
     this.$store.dispatch('loadMemberRolesByHierarchy')
     this.$store.dispatch('loadMemberStatus')
-    this.$store.dispatch('getMember', {id: this.$route.params.id})
-
-    return true
+    this.$store.dispatch('getMember', { id: this.$route.params.id })
   },
   computed: {
     member_roles () {
@@ -138,7 +145,7 @@ export default {
       data.map(el => {
         result.push(el)
       })
-
+      this.handleSelect()
       return result
     },
     member_status () {
@@ -148,13 +155,10 @@ export default {
       data.map(el => {
         result.push(el)
       })
-
+      this.handleSelect()
       return result
     },
-    member () {
-      console.log(this.$store.getters.gottenMember)
-      return this.$store.getters.gottenMember
-    },
+    ...mapState(['member'])
   },
   methods: {
     checkForm: function () {
@@ -239,6 +243,18 @@ export default {
           }
         })
       // this.$router.push('/member')
+    },
+    handleSelect () {
+      $(document).ready(() => {
+        $('.select2').select2().on('select2:select', function (e) {
+          $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
+        })
+
+        $('#birthdate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+        $('#birthdate').focusout(() => {
+          this.birthdate = $('#birthdate').val()
+        })
+      })
     }
   }
 }

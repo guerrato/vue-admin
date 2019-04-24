@@ -40,13 +40,24 @@ export default {
     'cropTitle',
     'btnUpload',
     'btnRemove',
-    'previewTitle'
+    'previewTitle',
+    'storedName',
+    'storedImage'
   ],
   data () {
     return {
       imageUrl: null,
       image: null,
       croppa: {}
+    }
+  },
+  watch: {
+    storedName (val, original) {
+      this.imageUrl = val
+    },
+    storedImage (val, original) {
+      this.image = val
+      this.croppa.refresh()
     }
   },
   mounted () {

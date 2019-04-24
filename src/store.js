@@ -76,8 +76,8 @@ export const store = new Vuex.Store({
             phone: obj.phone,
             whatsapp: obj.whatsapp,
             facebook: obj.facebook,
-            role: obj.role,
-            status: obj.status,
+            role_id: obj.role_id,
+            status_id: obj.status_id,
             image: obj.image,
             image_name: obj.image_name
           }
