@@ -58,7 +58,7 @@
                 </div>
                 <div class="form-group col-md-6">
                   <label>Responsabilidade:</label>
-                  <select class="form-control select2" id="role" v-model="role" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="role">
+                  <select class="form-control select2" id="role" v-model="role" data-value="" :value="role" style="width: 100%;" data-placeholder="Selecione..." ref="role">
                     <option v-for="rl in member_roles" v-bind:key="rl.id" v-bind:value="rl.id">
                       {{ rl.description }}
                     </option>
@@ -99,6 +99,7 @@ export default {
         type: 'default',
         message: null
       },
+      id: null,
       name: null,
       email: null,
       nickname: null,
@@ -115,6 +116,7 @@ export default {
   },
   watch: {
     member (val, original) {
+      this.id = val.id
       this.name = val.name
       this.email = val.email
       this.nickname = val.nickname
@@ -127,10 +129,25 @@ export default {
       this.status = val.status_id
       this.image_name = val.image_name
       this.image = `${process.env.VUE_APP_IRONHAND_BASE_URL}/storage${val.image}`
+      this.handleSelect()
+    },
+    member_roles (val, original) {
+      this.handleSelect()
+    },
+    member_status (val, original) {
+      this.handleSelect()
     }
   },
   mounted () {
-    this.handleSelect()
+    $(document).ready(() => {
+      $('.select2').select2().on('change', function (e) {
+        $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
+      })
+      $('#birthdate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+      $('#birthdate').focusout(() => {
+        this.birthdate = $('#birthdate').val()
+      })
+    })
   },
   created () {
     this.$store.dispatch('loadMemberRolesByHierarchy')
@@ -145,7 +162,6 @@ export default {
       data.map(el => {
         result.push(el)
       })
-      this.handleSelect()
       return result
     },
     member_status () {
@@ -155,7 +171,6 @@ export default {
       data.map(el => {
         result.push(el)
       })
-      this.handleSelect()
       return result
     },
     ...mapState(['member'])
@@ -200,6 +215,7 @@ export default {
       }
 
       const memberData = {
+        id: this.id,
         name: this.name,
         email: this.email,
         nickname: this.nickname,
@@ -213,13 +229,13 @@ export default {
         image_name: this.$refs.croppa.getImageName(),
         image: this.$refs.croppa.getCroppedImage()
       }
-
-      this.$store.dispatch('createMember', memberData)
+      console.log(memberData)
+      this.$store.dispatch('updateMember', memberData)
         .then(response => {
           this.errors = []
           this.alert.title = 'Success!'
           this.alert.type = 'success'
-          this.alert.message = 'The member was included successfuly.'
+          this.alert.message = 'The member was updated successfuly.'
         }).catch(error => {
           this.errors = []
 
@@ -246,14 +262,9 @@ export default {
     },
     handleSelect () {
       $(document).ready(() => {
-        $('.select2').select2().on('select2:select', function (e) {
-          $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
-        })
-
-        $('#birthdate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-        $('#birthdate').focusout(() => {
-          this.birthdate = $('#birthdate').val()
-        })
+        $('#gender').val(this.gender).trigger('change')
+        $('#role').val(this.role).trigger('change')
+        $('#status').val(this.status).trigger('change')
       })
     }
   }
