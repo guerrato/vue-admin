@@ -9,6 +9,7 @@ export const store = new Vuex.Store({
     member_roles: [],
     member_status: [],
     members: [],
+    member: null,
     ministries: []
   },
   mutations: {
@@ -20,6 +21,9 @@ export const store = new Vuex.Store({
     },
     setLoadedMembers (state, payload) {
       state.members = payload
+    },
+    setGottenMember (state, payload) {
+      state.member = payload
     },
     setLoadedMinistries (state, payload) {
       state.ministries = payload
@@ -51,6 +55,34 @@ export const store = new Vuex.Store({
           })
 
           commit('setLoadedMembers', members)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    getMember ({ commit }, payload) {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/${payload.id}`)
+        .then((response) => {
+          let member = null
+          const obj = response.data.data
+
+          member = {
+            id: obj.id,
+            name: obj.name,
+            email: obj.email,
+            nickname: obj.nickname,
+            birthdate: obj.birthdate,
+            gender: obj.gender,
+            phone: obj.phone,
+            whatsapp: obj.whatsapp,
+            facebook: obj.facebook,
+            role_id: obj.role_id,
+            status_id: obj.status_id,
+            image: obj.image,
+            image_name: obj.image_name
+          }
+
+          commit('setGottenMember', member)
         })
         .catch((error) => {
           console.log(error)
@@ -144,6 +176,38 @@ export const store = new Vuex.Store({
             reject(error.response)
           })
       })
+    },
+    updateMember ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        const member = {
+          name: payload.name,
+          email: payload.email,
+          nickname: payload.nickname,
+          birthdate: payload.birthdate,
+          gender: payload.gender,
+          phone: payload.phone,
+          whatsapp: payload.whatsapp,
+          facebook: payload.facebook,
+          role_id: payload.role_id,
+          status_id: payload.status_id,
+          image: payload.image,
+          image_name: payload.image_name
+        }
+
+        if (member.birthdate != null) {
+          if (member.birthdate.trim() !== '') {
+            member.birthdate = member.birthdate.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$3-$2-$1')
+          }
+        }
+
+        axios.put(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/${payload.id}`, member)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
     }
   },
   getters: {
@@ -151,6 +215,9 @@ export const store = new Vuex.Store({
       return state.members.sort((memberA, memberB) => {
         return memberA.id > memberB.id
       })
+    },
+    gottenMember (state) {
+      return state.member
     },
     loadedMemberRoles (state) {
       return state.member_roles.sort((roleA, roleB) => {

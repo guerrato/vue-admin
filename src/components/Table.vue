@@ -3,6 +3,12 @@
 </template>
 
 <script>
+let vmRouter = null
+
+$(document).on('click', '.btn-dt', function () {
+  vmRouter.push($(this).data('to'))
+})
+
 export default {
   props: [
     'id',
@@ -20,9 +26,11 @@ export default {
       this.dtHandle.clear()
       this.dtHandle.rows.add(this.rows)
       this.dtHandle.draw()
+      this.dtHandle.columns.adjust()
     }
   },
   mounted () {
+    vmRouter = this.$router
     let dtOptions = this.options
 
     dtOptions.columns = this.columns
