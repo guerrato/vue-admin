@@ -34,7 +34,8 @@
                 <div class="form-group col-md-6 col-lg-4">
                   <label for="birthdate">Nascido em:</label>
                   <div class="input-group">
-                    <input type="text" class="form-control" id="birthdate" v-model="birthdate" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                    <!-- <input type="text" class="form-control" id="birthdate" v-model="birthdate" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask> -->
+                    <input type="text" class="form-control" id="birthdate">
                   </div>
                 </div>
                 <div class="form-group col-md-6 col-lg-4">
@@ -128,14 +129,16 @@ export default {
       this.role = val.role_id
       this.status = val.status_id
       this.image_name = val.image_name
-      this.image = `${process.env.VUE_APP_IRONHAND_BASE_URL}/storage${val.image}`
-      this.handleSelect()
+      if (val.image) {
+        this.image = `${process.env.VUE_APP_IRONHAND_BASE_URL}/storage${val.image}`
+      }
+      this.handleForm()
     },
     member_roles (val, original) {
-      this.handleSelect()
+      this.handleForm()
     },
     member_status (val, original) {
-      this.handleSelect()
+      this.handleForm()
     }
   },
   mounted () {
@@ -143,6 +146,7 @@ export default {
       $('.select2').select2().on('change', function (e) {
         $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
       })
+
       $('#birthdate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
       $('#birthdate').focusout(() => {
         this.birthdate = $('#birthdate').val()
@@ -229,7 +233,7 @@ export default {
         image_name: this.$refs.croppa.getImageName(),
         image: this.$refs.croppa.getCroppedImage()
       }
-      console.log(memberData)
+
       this.$store.dispatch('updateMember', memberData)
         .then(response => {
           this.errors = []
@@ -260,11 +264,18 @@ export default {
         })
       // this.$router.push('/member')
     },
-    handleSelect () {
+    handleForm () {
       $(document).ready(() => {
         $('#gender').val(this.gender).trigger('change')
         $('#role').val(this.role).trigger('change')
         $('#status').val(this.status).trigger('change')
+
+        if (this.birthdate) {
+          $('#birthdate').val(this.birthdate.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3$2$1')).inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+          $('#birthdate').focusout(() => {
+            this.birthdate = $('#birthdate').val()
+          })
+        }
       })
     }
   }
