@@ -71,7 +71,8 @@ export default {
           id: el.id,
           name: el.name,
           nickname: el.nickname,
-          actions: `<span class="text-center btn-block"><button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/member/edit/${el.id}">Edit</button>&nbsp;<button type="button" class="btn btn-sm btn-danger btn-dt" data-to="/member/delete/${el.id}">Delete</button></span>`
+          actions: `<span class="text-center btn-block"><button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/member/edit/${el.id}">Edit</button>&nbsp; \
+          <button type="button" class="btn btn-sm btn-danger btn-dt" data-to="/member/delete/${el.id}">Delete</button></span>`
         })
       })
 

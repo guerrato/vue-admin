@@ -208,6 +208,21 @@ export const store = new Vuex.Store({
             reject(error.response)
           })
       })
+    },
+    deleteMember ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        const member = {
+          name: payload.name
+        }
+
+        axios.delete(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/${payload.id}`, member)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
     }
   },
   getters: {
