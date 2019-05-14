@@ -40,13 +40,41 @@ export default {
     'cropTitle',
     'btnUpload',
     'btnRemove',
-    'previewTitle'
+    'previewTitle',
+    'storedName',
+    'storedImage'
   ],
   data () {
     return {
       imageUrl: null,
       image: null,
       croppa: {}
+    }
+  },
+  watch: {
+    storedName (val, original) {
+      this.imageUrl = val
+    },
+    storedImage (val, original) {
+      let self = this
+      let getImgBase64 = (url, callback) => {
+        let xhr = new XMLHttpRequest()
+        xhr.onload = () => {
+          let reader = new FileReader()
+          reader.onloadend = () => {
+            callback(reader.result)
+          }
+          reader.readAsDataURL(xhr.response)
+        }
+        xhr.open('GET', url)
+        xhr.responseType = 'blob'
+        xhr.send()
+      }
+
+      getImgBase64(val, dataUri => {
+        self.image = dataUri
+        self.croppa.refresh()
+      })
     }
   },
   mounted () {
@@ -58,15 +86,15 @@ export default {
   },
   methods: {
     onFileChange (e) {
-      var files = e.target.files || e.dataTransfer.files
+      let files = e.target.files || e.dataTransfer.files
       if (!files.length) {
         return
       }
       this.createImage(files[0])
     },
     createImage (file) {
-      var reader = new FileReader()
-      var input = event.target
+      let reader = new FileReader()
+      let input = event.target
 
       reader.onload = (e) => {
         this.imageUrl = input.value
@@ -85,6 +113,9 @@ export default {
       return this.croppa.generateDataUrl()
     },
     getImageName: function () {
+      if (this.imageUrl == null) {
+        return null
+      }
       return this.imageUrl.replace(/^.*[\\/]/, '')
     }
   }

@@ -9,9 +9,9 @@
 
     <section class="content">
       <v-box>
-        <v-alert title="Erros!" type="danger" dismissible v-if="errors.length">
-          Por favor, corrija os seguintes erros:
-          <ul>
+        <v-alert :title="alert.title" :type="alert.type" v-if="alert.message">
+          <p>{{ alert.message }}</p>
+          <ul v-if="errors.length">
             <li v-for="error in errors" :key="error">{{ error }}</li>
           </ul>
         </v-alert>
@@ -40,7 +40,7 @@
                 <div class="form-group col-md-6 col-lg-4">
                   <label>Gênero:</label>
                   <select class="form-control select2" id="gender" v-model="gender" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="gender">
-                    <option value="male">Masculo</option>
+                    <option value="male">Masculino</option>
                     <option value="female">Feminino</option>
                   </select>
                 </div>
@@ -59,17 +59,17 @@
                 <div class="form-group col-md-6">
                   <label>Responsabilidade:</label>
                   <select class="form-control select2" id="role" v-model="role" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="role">
-                    <option value="member">Membro</option>
-                    <option value="coordinator">Coordenador</option>
-                    <option value="administator">Administrador</option>
+                    <option v-for="rl in member_roles" v-bind:key="rl.id" v-bind:value="rl.id">
+                      {{ rl.description }}
+                    </option>
                   </select>
                 </div>
                 <div class="form-group col-md-6">
                   <label>Status:</label>
                   <select class="form-control select2" id="status" v-model="status" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="status">
-                    <option value="activated">Ativo</option>
-                    <option value="traveling">Viajando</option>
-                    <option value="transfered">Transferido</option>
+                    <option v-for="st in member_status" v-bind:key="st.id" v-bind:value="st.id">
+                      {{ st.description }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -88,18 +88,15 @@
 </template>
 
 <script>
-$(function () {
-  $('.select2').select2().on('select2:select', function (e) {
-    $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
-  })
-
-  $('#birthdate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-})
-
 export default {
   data () {
     return {
       errors: [],
+      alert: {
+        title: null,
+        type: 'default',
+        message: null
+      },
       name: null,
       email: null,
       nickname: null,
@@ -110,8 +107,47 @@ export default {
       facebook: null,
       role: null,
       status: null,
-      imageUrl: null,
+      image_name: null,
       image: null
+    }
+  },
+  mounted () {
+    $(document).ready(() => {
+      $('.select2').select2().on('select2:select', function (e) {
+        $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
+      })
+
+      $('#birthdate').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+      $('#birthdate').focusout(() => {
+        this.birthdate = $('#birthdate').val()
+      })
+    })
+  },
+  created () {
+    this.$store.dispatch('loadMemberRolesByHierarchy')
+    this.$store.dispatch('loadMemberStatus')
+    return true
+  },
+  computed: {
+    member_roles () {
+      let result = []
+      let data = this.$store.getters.loadedMemberRoles
+
+      data.map(el => {
+        result.push(el)
+      })
+
+      return result
+    },
+    member_status () {
+      let result = []
+      let data = this.$store.getters.loadedMemberStatus
+
+      data.map(el => {
+        result.push(el)
+      })
+
+      return result
     }
   },
   methods: {
@@ -141,6 +177,10 @@ export default {
       if (!this.status) {
         this.errors.push('Status requerido.')
       }
+
+      this.alert.title = 'Error!'
+      this.alert.type = 'danger'
+      this.alert.message = 'Errors were found. Please, solve them before proceed.'
     },
     submitForm (e) {
       e.preventDefault()
@@ -158,14 +198,40 @@ export default {
         phone: this.phone,
         whatsapp: this.whatsapp,
         facebook: this.facebook,
-        role: this.role,
-        status: this.status,
-        imageUrl: this.$refs.croppa.getImageName(),
+        role_id: this.role,
+        status_id: this.status,
+        image_name: this.$refs.croppa.getImageName(),
         image: this.$refs.croppa.getCroppedImage()
       }
-      console.log(memberData)
-      console.log(this.$store.dispatch('loadMembers'))
+
       this.$store.dispatch('createMember', memberData)
+        .then(response => {
+          this.errors = []
+          this.alert.title = 'Success!'
+          this.alert.type = 'success'
+          this.alert.message = 'The member was included successfuly.'
+        }).catch(error => {
+          this.errors = []
+
+          if ('data' in error) {
+            if ('message' in error.data) {
+              Object.keys(error.data.message).map(key => {
+                error.data.message[key].map(err => {
+                  this.errors.push(err)
+                })
+              })
+            }
+          }
+
+          this.alert.title = 'Error!'
+          this.alert.type = 'danger'
+
+          if (this.errors.length) {
+            this.alert.message = 'Errors were found. Please, solve them before proceed.'
+          } else {
+            this.alert.message = 'Errors were found. Please, try later.'
+          }
+        })
       // this.$router.push('/member')
     }
   }
