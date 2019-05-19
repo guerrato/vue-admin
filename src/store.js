@@ -10,6 +10,7 @@ export const store = new Vuex.Store({
     member_status: [],
     members: [],
     member: null,
+    coordinators: [],
     ministries: []
   },
   mutations: {
@@ -24,6 +25,9 @@ export const store = new Vuex.Store({
     },
     setGottenMember (state, payload) {
       state.member = payload
+    },
+    setLoadedNotAllocatedCoordinators (state, payload) {
+      state.coordinators = payload
     },
     setLoadedMinistries (state, payload) {
       state.ministries = payload
@@ -119,6 +123,26 @@ export const store = new Vuex.Store({
           })
 
           commit('setLoadedMemberStatus', status)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    loadNotAllocatedCoordinators ({ commit }, payload) {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/notallocatedcoordinators/${payload.ministry_id}`, {
+        params: {
+          gender: ['male', 'female'].includes(payload.gender) ? payload.gender : null
+        }
+      })
+        .then((response) => {
+          const coord = []
+          const obj = response.data.data
+          console.log(response.data.data)
+          obj.map(item => {
+            coord.push(item)
+          })
+
+          commit('setLoadedNotAllocatedCoordinators', coord)
         })
         .catch((error) => {
           console.log(error)
@@ -242,6 +266,11 @@ export const store = new Vuex.Store({
     loadedMemberStatus (state) {
       return state.member_status.sort((statusA, statusB) => {
         return statusA.id > statusB.id
+      })
+    },
+    loadedNotAllocatedCoordinators (state) {
+      return state.coordinators.sort((coordA, coordB) => {
+        return coordA.id > coordB.id
       })
     },
     loadedMinistries (state) {
