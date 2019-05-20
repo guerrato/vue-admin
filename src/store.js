@@ -247,6 +247,24 @@ export const store = new Vuex.Store({
             reject(error.response)
           })
       })
+    },
+    createGroup ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        const group = {
+          description: payload.description,
+          leader_id: payload.leader,
+          required_gender: payload.gender,
+          ministry_id: payload.ministry
+        }
+
+        axios.post(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry}/group`, group)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
     }
   },
   getters: {

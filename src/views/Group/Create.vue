@@ -24,18 +24,14 @@
             <div class="form-group col-md-6 col-lg-4">
               <label>Destinado à:</label>
               <select class="form-control select2" id="gender" v-model="gender" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="gender">
-                <option value="null">Geral</option>
+                <option value="null" selected>Geral</option>
                 <option value="male">Homens</option>
                 <option value="female">Mulheres</option>
               </select>
             </div>
             <div class="form-group col-md-6">
               <label>Líder:</label>
-              <select class="form-control select2" id="leader" v-model="leader" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="leader">
-                <!-- <option v-for="ld in coordinators" v-bind:key="ld.id" v-bind:value="ld.id">
-                  {{ ld.name }}
-                </option> -->
-              </select>
+              <select class="form-control select2" id="leader" v-model="leader" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="leader"></select>
             </div>
           </div>
           <div class="box-footer">
@@ -98,7 +94,7 @@ export default {
       this.errors = []
 
       if (!this.description) {
-        this.errors.push('Nome requerido.')
+        this.errors.push('Descriçāo requerida.')
       }
 
       this.alert.title = 'Error!'
@@ -115,7 +111,8 @@ export default {
       const groupData = {
         description: this.description,
         gender: this.gender,
-        leader: this.leader
+        leader: this.leader,
+        ministry: 1
       }
 
       this.$store.dispatch('createGroup', groupData)
