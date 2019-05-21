@@ -11,7 +11,8 @@ export const store = new Vuex.Store({
     members: [],
     member: null,
     coordinators: [],
-    ministries: []
+    ministries: [],
+    groups: []
   },
   mutations: {
     setLoadedMemberRoles (state, payload) {
@@ -31,6 +32,9 @@ export const store = new Vuex.Store({
     },
     setLoadedMinistries (state, payload) {
       state.ministries = payload
+    },
+    setLoadedGroups (state, payload) {
+      state.groups = payload
     }
   },
   actions: {
@@ -248,6 +252,27 @@ export const store = new Vuex.Store({
           })
       })
     },
+    loadGroups ({ commit }, payload) {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry}/group/groupsofministry`)
+        .then((response) => {
+          let groups = null
+          const obj = response.data.data
+
+          groups = obj.map(el => {
+            return {
+              id: el.id,
+              description: el.description,
+              leader: el.leader.name,
+              gender: el.required_gender
+            }
+          })
+
+          commit('setLoadedGroups', groups)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
     createGroup ({ commit, getters }, payload) {
       return new Promise((resolve, reject) => {
         const group = {
@@ -294,6 +319,11 @@ export const store = new Vuex.Store({
     loadedMinistries (state) {
       return state.ministries.sort((ministryA, ministryB) => {
         return ministryA.id > ministryB.id
+      })
+    },
+    loadedGroups (state) {
+      return state.groups.sort((groupA, groupB) => {
+        return groupA.id > groupB.id
       })
     }
   }

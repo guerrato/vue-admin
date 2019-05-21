@@ -30,12 +30,16 @@ export default {
           title: 'ID'
         },
         {
-          data: 'name',
-          title: 'Nome'
+          data: 'description',
+          title: 'Descriçāo'
         },
         {
-          data: 'nickname',
-          title: 'Apelido'
+          data: 'leader',
+          title: 'Responsável'
+        },
+        {
+          data: 'gender',
+          title: 'Genero'
         },
         {
           data: 'actions',
@@ -54,7 +58,7 @@ export default {
     }
   },
   created () {
-    return this.$store.dispatch('loadMembers')
+    return this.$store.dispatch('loadGroups', { ministry: 1 })
   },
   methods: {
     redirect (url) {
@@ -63,18 +67,21 @@ export default {
   },
   computed: {
     groups () {
-      let result = []
-      let data = this.$store.getters.loadedMembers
+      let data = this.$store.getters.loadedGroups
 
-      data.forEach(el => {
-        result.push({
+      let result = data.map(el => {
+        console.log(el)
+        return {
           id: el.id,
-          name: el.name,
-          nickname: el.nickname,
+          description: el.description,
+          leader: el.leader,
+          gender: el.gender,
           actions: `<span class="text-center btn-block"><button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/member/edit/${el.id}">Edit</button>&nbsp; \
           <button type="button" class="btn btn-sm btn-danger btn-dt" data-to="/member/delete/${el.id}">Delete</button></span>`
-        })
+        }
       })
+
+      console.log(result)
 
       return result
     }
