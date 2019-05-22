@@ -11,6 +11,7 @@ import EditMinistry from '@/views/Ministry/Edit'
 import ListGroup from '@/views/Group/List'
 import CreateGroup from '@/views/Group/Create'
 import EditGroup from '@/views/Group/Edit'
+import GroupMember from '@/views/Group/Member'
 
 Vue.use(Router)
 
@@ -74,6 +75,11 @@ export default new Router({
       path: '/group/edit',
       name: 'EditGroup',
       component: EditGroup
+    },
+    {
+      path: '/group/:id/member',
+      name: 'GroupMember',
+      component: GroupMember
     }
   ]
 })

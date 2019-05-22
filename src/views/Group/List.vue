@@ -77,7 +77,8 @@ export default {
           leader: el.leader,
           gender: el.gender,
           actions: `<span class="text-center btn-block"><button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/member/edit/${el.id}">Edit</button>&nbsp; \
-          <button type="button" class="btn btn-sm btn-danger btn-dt" data-to="/member/delete/${el.id}">Delete</button></span>`
+          <button type="button" class="btn btn-sm btn-danger btn-dt" data-to="/member/delete/${el.id}">Delete</button>&nbsp; \
+          <button type="button" class="btn btn-sm btn-default btn-dt" data-to="/group/${el.id}/member">Members</button></span>`
         }
       })
 
