@@ -69,8 +69,7 @@ export default {
     groups () {
       let data = this.$store.getters.loadedGroups
 
-      let result = data.map(el => {
-        console.log(el)
+      return data.map(el => {
         return {
           id: el.id,
           description: el.description,
@@ -81,10 +80,6 @@ export default {
           <button type="button" class="btn btn-sm btn-default btn-dt" data-to="/group/${el.id}/member">Members</button></span>`
         }
       })
-
-      console.log(result)
-
-      return result
     }
   }
 }
