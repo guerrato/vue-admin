@@ -174,6 +174,7 @@
             <li><router-link to="/member"><i class="fa fa-user"></i> <span>Members</span></router-link></li>
             <li><router-link to="/group"><i class="fa fa-group"></i> <span>Groups</span></router-link></li>
             <li><router-link to="/ministry"><i class="fa fa-university"></i> <span>Ministries</span></router-link></li>
+            <li><router-link to="/event"><i class="fa fa-calendar"></i> <span>Events</span></router-link></li>
           </ul>
         </section>
         <!-- /.sidebar -->
