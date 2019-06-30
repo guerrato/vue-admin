@@ -77,7 +77,7 @@ export default new Router({
       component: EditGroup
     },
     {
-      path: '/group/:id/member',
+      path: '/group/:ministry_id/:id/member',
       name: 'GroupMember',
       component: GroupMember
     }
