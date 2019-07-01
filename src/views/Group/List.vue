@@ -70,12 +70,11 @@ export default {
       let data = this.$store.getters.loadedGroups
 
       return data.map(el => {
-        let image = el.leader.image ? `<img src="${process.env.VUE_APP_IRONHAND_BASE_URL}/storage${el.leader.image}" width="30" height="30" alt="${el.leader.name}">&nbsp;` : null
         return {
           id: el.id,
           description: el.description,
-          leader: `${image}${el.leader.name}`,
-          gender: el.gender,
+          leader: `${el.leader.name}`,
+          gender: el.gender === null ? 'Geral' : el.gender,
           actions: `<span class="text-center btn-block"> \
           <button type="button" class="btn btn-sm btn-default btn-dt" data-to="/group/1/${el.id}/member">Members</button>&nbsp; \
           <button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/group/1/${el.id}/edit">Edit</button>&nbsp; \
