@@ -375,6 +375,17 @@ export const store = new Vuex.Store({
             reject(error.response)
           })
       })
+    },
+    deleteGroup ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        axios.delete(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry_id}/group/${payload.id}`)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
     }
   },
   getters: {

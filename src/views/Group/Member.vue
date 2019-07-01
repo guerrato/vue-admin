@@ -145,7 +145,9 @@ export default {
         return false
       }
     },
-    submit: function () {
+    submit (e) {
+      e.preventDefault()
+
       const groupData = {
         id: this.group.id,
         members: this.allocated,

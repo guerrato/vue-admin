@@ -2,8 +2,8 @@
   <div>
     <section class="content-header">
       <h1>
-        Membros
-        <small>Exclusão de membro</small>
+        Group
+        <small>Exclusão de grupo</small>
       </h1>
     </section>
 
@@ -18,12 +18,12 @@
         <form @submit="submitForm">
           <div class="box-body">
             <div class="form-group col-md-12">
-              <p for="name">The following member will be permanently deleted. Deleted member data cannot be recovered.<br> Please, if you are sure, type "<b>{{ this.refenrece }}</b>" to confirm:</p>
+              <p for="name">The following group will be permanently deleted. Deleted group data cannot be recovered.<br> Please, if you are sure, type "<b>{{ this.refenrece }}</b>" to confirm:</p>
               <input type="text" class="form-control" id="name" v-model="name" placeholder="Nome">
             </div>
           </div>
           <div class="box-footer">
-            <router-link class="btn btn-default" to="/member">Cancel</router-link>
+            <router-link class="btn btn-default" to="/group">Cancel</router-link>
             <button type="submit" class="btn btn-danger pull-right" v-if="this.name === this.refenrece">Delete</button>
           </div>
         </form>
@@ -50,16 +50,19 @@ export default {
     }
   },
   watch: {
-    member (val, original) {
+    group (val, original) {
       this.id = val.id
-      this.refenrece = val.name
+      this.refenrece = val.description
     }
   },
   created () {
-    this.$store.dispatch('getMember', { id: this.$route.params.id })
+    this.$store.dispatch('getGroup', {
+      id: this.$route.params.id,
+      ministry_id: this.$route.params.ministry_id
+    })
   },
   computed: {
-    ...mapState(['member'])
+    ...mapState(['group'])
   },
   methods: {
     checkForm: function () {
@@ -86,16 +89,16 @@ export default {
         return
       }
 
-      const memberData = {
+      const groupData = {
         id: this.id
       }
 
-      this.$store.dispatch('deleteMember', memberData)
+      this.$store.dispatch('deleteGroup', groupData)
         .then(response => {
           this.errors = []
           this.alert.title = 'Success!'
           this.alert.type = 'success'
-          this.alert.message = 'The member was deleted successfuly.'
+          this.alert.message = 'The group was deleted successfuly.'
         }).catch(error => {
           this.errors = []
 
