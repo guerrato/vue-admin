@@ -71,6 +71,7 @@ export default {
       $('.select2').select2().on('select2:select', function (e) {
         $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
         if ($(e.currentTarget).attr('id') === 'gender') {
+          $('#leader').html('')
           self.getCoordinators({ gender: $(e.currentTarget).val() })
         }
       })

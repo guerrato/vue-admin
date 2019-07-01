@@ -78,7 +78,7 @@ export default {
           gender: el.gender,
           actions: `<span class="text-center btn-block"> \
           <button type="button" class="btn btn-sm btn-default btn-dt" data-to="/group/1/${el.id}/member">Members</button>&nbsp; \
-          <button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/group/edit/${el.id}">Edit</button>&nbsp; \
+          <button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/group/1/${el.id}/edit">Edit</button>&nbsp; \
           <button type="button" class="btn btn-sm btn-danger btn-dt" data-to="/group/1/${el.id}/delete">Delete</button></span>`
         }
       })
