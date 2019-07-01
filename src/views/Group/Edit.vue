@@ -24,7 +24,7 @@
             <div class="form-group col-md-6 col-lg-4">
               <label>Destinado à:</label>
               <select class="form-control select2" id="gender" v-model="gender" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="gender">
-                <option value="null">Geral</option>
+                <option value="null" selected>Geral</option>
                 <option value="male">Homens</option>
                 <option value="female">Mulheres</option>
               </select>
@@ -78,21 +78,21 @@ export default {
 
       switch (this.gender) {
         case 'male':
+          $('#gender').val(this.gender).trigger('change')
           $("#gender option[value='female']").remove()
           break
         case 'female':
+          $('#gender').val(this.gender).trigger('change')
           $("#gender option[value='male']").remove()
           break
         default:
+          $('#gender').trigger('change')
           break
       }
     },
     member (val, original) {
       this.leader_name = val.name
-      const self = this
-      $(document).ready(() => {
-        $('#gender').val(self.gender).trigger('change')
-      })
+
       this.getCoordinators({ gender: this.gender })
     }
   },
