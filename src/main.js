@@ -7,6 +7,7 @@ import { store } from './store'
 import './registerServiceWorker'
 
 import Croppa from 'vue-croppa'
+import Draggable from 'vuedraggable'
 import Box from './components/Box'
 import Alert from './components/Alert'
 import Table from './components/Table'
@@ -18,6 +19,7 @@ Vue.component('v-box', Box)
 Vue.component('v-alert', Alert)
 Vue.component('v-table', Table)
 Vue.component('croppa', Croppa.component)
+Vue.component('v-draggable', Draggable)
 Vue.component('v-crop', Crop)
 
 new Vue({
