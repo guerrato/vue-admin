@@ -9,8 +9,13 @@ export const store = new Vuex.Store({
     member_roles: [],
     member_status: [],
     members: [],
+    members_not_allocated: [],
+    group_members: [],
     member: null,
-    ministries: []
+    coordinators: [],
+    ministries: [],
+    groups: [],
+    group: null
   },
   mutations: {
     setLoadedMemberRoles (state, payload) {
@@ -25,8 +30,23 @@ export const store = new Vuex.Store({
     setGottenMember (state, payload) {
       state.member = payload
     },
+    setLoadedNotAllocatedCoordinators (state, payload) {
+      state.coordinators = payload
+    },
+    setLoadedNotAllocatedMembers (state, payload) {
+      state.members_not_allocated = payload
+    },
+    setLoadedAllocatedMembers (state, payload) {
+      state.group_members = payload
+    },
     setLoadedMinistries (state, payload) {
       state.ministries = payload
+    },
+    setLoadedGroups (state, payload) {
+      state.groups = payload
+    },
+    setGottenGroup (state, payload) {
+      state.group = payload
     }
   },
   actions: {
@@ -119,6 +139,59 @@ export const store = new Vuex.Store({
           })
 
           commit('setLoadedMemberStatus', status)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    loadNotAllocatedCoordinators ({ commit }, payload) {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/notallocatedcoordinators/${payload.ministry_id}`, {
+        params: {
+          gender: ['male', 'female'].includes(payload.gender) ? payload.gender : null
+        }
+      })
+        .then((response) => {
+          const coord = []
+          const obj = response.data.data
+          obj.map(item => {
+            coord.push(item)
+          })
+
+          commit('setLoadedNotAllocatedCoordinators', coord)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    loadNotAllocatedMembers ({ commit }, payload) {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/notallocatedmembers/${payload.ministry_id}`, {
+        params: {
+          gender: ['male', 'female'].includes(payload.gender) ? payload.gender : null
+        }
+      })
+        .then((response) => {
+          const members = []
+          const obj = response.data.data
+          obj.map(item => {
+            members.push(item)
+          })
+
+          commit('setLoadedNotAllocatedMembers', members)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    loadAllocatedMembers ({ commit }, payload) {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry_id}/group/${payload.id}/getmembers`)
+        .then((response) => {
+          const members = []
+          const obj = response.data.data
+          obj.map(item => {
+            members.push(item)
+          })
+
+          commit('setLoadedAllocatedMembers', members)
         })
         .catch((error) => {
           console.log(error)
@@ -223,6 +296,114 @@ export const store = new Vuex.Store({
             reject(error.response)
           })
       })
+    },
+    loadGroups ({ commit }, payload) {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry}/group/groupsofministry`)
+        .then((response) => {
+          let groups = null
+          const obj = response.data.data
+
+          groups = obj.map(el => {
+            return {
+              id: el.id,
+              description: el.description,
+              leader: {
+                name: el.leader.name,
+                image: el.leader.image
+              },
+              gender: el.required_gender
+            }
+          })
+
+          commit('setLoadedGroups', groups)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    createGroup ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        const group = {
+          description: payload.description,
+          leader_id: payload.leader,
+          required_gender: payload.gender,
+          ministry_id: payload.ministry
+        }
+
+        axios.post(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry}/group`, group)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
+    },
+    getGroup ({ commit }, payload) {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry_id}/group/${payload.id}`)
+        .then((response) => {
+          let group = null
+          const obj = response.data.data
+
+          group = {
+            id: obj.id,
+            description: obj.description,
+            slug: obj.slug,
+            gender: obj.required_gender,
+            ministry: obj.ministry_id,
+            leader_id: obj.leader_id
+          }
+
+          commit('setGottenGroup', group)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    arrangeMembers ({ commit, getters }, payload) {
+      const members = payload.members.map(i => {
+        return i.id
+      })
+      return new Promise((resolve, reject) => {
+        axios.put(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry}/group/${payload.id}/arrangemembers`, {
+          members: members
+        })
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
+    },
+    deleteGroup ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        axios.delete(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry_id}/group/${payload.id}`)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
+    },
+    updateGroup ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        const group = {
+          description: payload.description,
+          leader_id: payload.leader,
+          required_gender: payload.gender,
+          ministry_id: payload.ministry
+        }
+
+        axios.put(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry}/group/${payload.id}`, group)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
     }
   },
   getters: {
@@ -244,10 +425,33 @@ export const store = new Vuex.Store({
         return statusA.id > statusB.id
       })
     },
+    loadedNotAllocatedCoordinators (state) {
+      return state.coordinators.sort((coordA, coordB) => {
+        return coordA.id > coordB.id
+      })
+    },
+    loadedNotAllocatedMembers (state) {
+      return state.members_not_allocated.sort((memberA, memberB) => {
+        return memberA.id > memberB.id
+      })
+    },
+    loadedAllocatedMembers (state) {
+      return state.group_members.sort((memberA, memberB) => {
+        return memberA.id > memberB.id
+      })
+    },
     loadedMinistries (state) {
       return state.ministries.sort((ministryA, ministryB) => {
         return ministryA.id > ministryB.id
       })
+    },
+    loadedGroups (state) {
+      return state.groups.sort((groupA, groupB) => {
+        return groupA.id > groupB.id
+      })
+    },
+    gottenGroup (state) {
+      return state.group
     }
   }
 })
