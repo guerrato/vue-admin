@@ -145,7 +145,7 @@ export const store = new Vuex.Store({
         })
     },
     loadNotAllocatedCoordinators ({ commit }, payload) {
-      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member/notallocatedcoordinators/${payload.ministry_id}`, {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry_id}/member/notallocatedcoordinators`, {
         params: {
           gender: ['male', 'female'].includes(payload.gender) ? payload.gender : null
         }
@@ -164,7 +164,7 @@ export const store = new Vuex.Store({
         })
     },
     loadNotAllocatedMembers ({ commit }, payload) {
-      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member/notallocatedmembers/${payload.ministry_id}`, {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry_id}/member/notallocatedmembers`, {
         params: {
           gender: ['male', 'female'].includes(payload.gender) ? payload.gender : null
         }
