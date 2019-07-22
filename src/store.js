@@ -51,7 +51,7 @@ export const store = new Vuex.Store({
   },
   actions: {
     loadMembers ({ commit }) {
-      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member`)
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member`)
         .then((response) => {
           const members = []
           const obj = response.data.data
@@ -81,7 +81,7 @@ export const store = new Vuex.Store({
         })
     },
     getMember ({ commit }, payload) {
-      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/${payload.id}`)
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member/${payload.id}`)
         .then((response) => {
           let member = null
           const obj = response.data.data
@@ -109,7 +109,7 @@ export const store = new Vuex.Store({
         })
     },
     loadMemberRolesByHierarchy ({ commit }) {
-      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/role/listRolesByHierarchy/3`)
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member/role/3/listrolesbyhierarchy`)
         .then((response) => {
           const roles = []
           const obj = response.data.data
@@ -129,7 +129,7 @@ export const store = new Vuex.Store({
         })
     },
     loadMemberStatus ({ commit }) {
-      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/status`)
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member/status`)
         .then((response) => {
           const status = []
           const obj = response.data.data
@@ -145,7 +145,7 @@ export const store = new Vuex.Store({
         })
     },
     loadNotAllocatedCoordinators ({ commit }, payload) {
-      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/notallocatedcoordinators/${payload.ministry_id}`, {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry_id}/member/notallocatedcoordinators`, {
         params: {
           gender: ['male', 'female'].includes(payload.gender) ? payload.gender : null
         }
@@ -164,7 +164,7 @@ export const store = new Vuex.Store({
         })
     },
     loadNotAllocatedMembers ({ commit }, payload) {
-      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/notallocatedmembers/${payload.ministry_id}`, {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.ministry_id}/member/notallocatedmembers`, {
         params: {
           gender: ['male', 'female'].includes(payload.gender) ? payload.gender : null
         }
@@ -241,7 +241,7 @@ export const store = new Vuex.Store({
           }
         }
 
-        axios.post(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member`, member)
+        axios.post(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member`, member)
           .then(response => {
             resolve(response)
           })
@@ -273,7 +273,7 @@ export const store = new Vuex.Store({
           }
         }
 
-        axios.put(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/${payload.id}`, member)
+        axios.put(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member/${payload.id}`, member)
           .then(response => {
             resolve(response)
           })
@@ -288,7 +288,7 @@ export const store = new Vuex.Store({
           name: payload.name
         }
 
-        axios.delete(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/member/${payload.id}`, member)
+        axios.delete(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member/${payload.id}`, member)
           .then(response => {
             resolve(response)
           })
