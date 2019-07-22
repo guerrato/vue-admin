@@ -111,7 +111,7 @@ export default {
 
       const groupData = {
         description: this.description,
-        gender: this.gender,
+        gender: this.gender === 'null' ? null : this.gender,
         leader: this.leader,
         ministry: 1
       }
