@@ -14,6 +14,7 @@ export const store = new Vuex.Store({
     member: null,
     coordinators: [],
     ministries: [],
+    ministry: null,
     groups: [],
     group: null
   },
@@ -47,7 +48,11 @@ export const store = new Vuex.Store({
     },
     setGottenGroup (state, payload) {
       state.group = payload
+    },
+    setGottenMinistry (state, payload) {
+      state.ministry = payload
     }
+
   },
   actions: {
     loadMembers ({ commit }) {
@@ -109,7 +114,7 @@ export const store = new Vuex.Store({
         })
     },
     loadMemberRolesByHierarchy ({ commit }) {
-      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member/role/3/listrolesbyhierarchy`)
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member/role/4/listrolesbyhierarchy`)
         .then((response) => {
           const roles = []
           const obj = response.data.data
@@ -208,7 +213,7 @@ export const store = new Vuex.Store({
               id: item.id,
               name: item.name,
               description: item.description,
-              coordinator: item.coordinator.name
+              gender: item.required_gender
             })
           })
 
@@ -217,6 +222,75 @@ export const store = new Vuex.Store({
         .catch((error) => {
           console.log(error)
         })
+    },
+    getMinistry ({ commit }, payload) {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.id}`)
+        .then((response) => {
+          let ministry = null
+          const obj = response.data.data
+
+          ministry = {
+            id: obj.id,
+            name: obj.name,
+            description: obj.description,
+            coordinators: obj.coordinators,
+            gender: obj.required_gender
+          }
+
+          commit('setGottenMinistry', ministry)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    createMinistry ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        const ministry = {
+          name: payload.name,
+          description: payload.description,
+          required_gender: payload.gender,
+          coordinators: payload.coordinators
+        }
+
+        axios.post(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry`, ministry)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
+    },
+    updateMinistry ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        const ministry = {
+          id: payload.id,
+          name: payload.name,
+          description: payload.description,
+          required_gender: payload.gender,
+          coordinators: payload.coordinators
+        }
+
+        axios.put(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.id}`, ministry)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
+    },
+    deleteMinistry ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        axios.delete(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.id}`)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            console.log(error.response)
+            reject(error.response)
+          })
+      })
     },
     createMember ({ commit, getters }, payload) {
       return new Promise((resolve, reject) => {
@@ -452,6 +526,9 @@ export const store = new Vuex.Store({
     },
     gottenGroup (state) {
       return state.group
+    },
+    gottenMinistry (state) {
+      return state.ministry
     }
   }
 })
