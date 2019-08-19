@@ -35,11 +35,8 @@ export default {
         },
         {
           data: 'description',
-          title: 'Descrição'
-        },
-        {
-          data: 'coordinator',
-          title: 'Coordenador'
+          title: 'Descrição',
+          width: '50%'
         },
         {
           data: 'actions',
@@ -65,8 +62,10 @@ export default {
           id: el.id,
           name: el.name,
           description: el.description,
-          coordinator: el.coordinator,
-          actions: ''
+          actions: `<span class="text-center btn-block"> \
+          <button type="button" class="btn btn-sm btn-default btn-dt" data-to="/ministry/${el.id}/coordinators">Coordinators</button>&nbsp; \
+          <button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/ministry/${el.id}/edit">Edit</button>&nbsp; \
+          <button type="button" class="btn btn-sm btn-danger btn-dt" data-to="/ministry/${el.id}/delete">Delete</button></span>`
         })
       })
 

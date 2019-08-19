@@ -109,7 +109,7 @@ export const store = new Vuex.Store({
         })
     },
     loadMemberRolesByHierarchy ({ commit }) {
-      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member/role/3/listrolesbyhierarchy`)
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member/role/4/listrolesbyhierarchy`)
         .then((response) => {
           const roles = []
           const obj = response.data.data
@@ -208,7 +208,7 @@ export const store = new Vuex.Store({
               id: item.id,
               name: item.name,
               description: item.description,
-              coordinator: item.coordinator.name
+              required_gender: item.gender
             })
           })
 
@@ -217,6 +217,24 @@ export const store = new Vuex.Store({
         .catch((error) => {
           console.log(error)
         })
+    },
+    createMinistry ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        const ministry = {
+          name: payload.name,
+          description: payload.description,
+          required_gender: payload.gender,
+          coordinators: payload.coordinators
+        }
+
+        axios.post(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry`, ministry)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
     },
     createMember ({ commit, getters }, payload) {
       return new Promise((resolve, reject) => {
