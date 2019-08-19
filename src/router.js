@@ -58,7 +58,7 @@ export default new Router({
       component: CreateMinistry
     },
     {
-      path: '/ministry/edit',
+      path: '/ministry/:id/edit',
       name: 'EditMinistry',
       component: EditMinistry
     },

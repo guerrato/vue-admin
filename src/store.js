@@ -14,6 +14,7 @@ export const store = new Vuex.Store({
     member: null,
     coordinators: [],
     ministries: [],
+    ministry: null,
     groups: [],
     group: null
   },
@@ -47,7 +48,11 @@ export const store = new Vuex.Store({
     },
     setGottenGroup (state, payload) {
       state.group = payload
+    },
+    setGottenMinistry (state, payload) {
+      state.ministry = payload
     }
+
   },
   actions: {
     loadMembers ({ commit }) {
@@ -213,6 +218,26 @@ export const store = new Vuex.Store({
           })
 
           commit('setLoadedMinistries', ministries)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    getMinistry ({ commit }, payload) {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.id}`)
+        .then((response) => {
+          let ministry = null
+          const obj = response.data.data
+
+          ministry = {
+            id: obj.id,
+            name: obj.name,
+            description: obj.description,
+            coordinators: obj.coordinators,
+            gender: obj.required_gender
+          }
+
+          commit('setGottenMinistry', ministry)
         })
         .catch((error) => {
           console.log(error)
@@ -470,6 +495,9 @@ export const store = new Vuex.Store({
     },
     gottenGroup (state) {
       return state.group
+    },
+    gottenMinistry (state) {
+      return state.ministry
     }
   }
 })

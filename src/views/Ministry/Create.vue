@@ -101,8 +101,6 @@ export default {
         coordinators: [1]
       }
 
-      console.log(ministryData)
-
       this.$store.dispatch('createMinistry', ministryData)
         .then(response => {
           this.errors = []
