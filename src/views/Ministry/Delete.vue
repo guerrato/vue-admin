@@ -3,7 +3,7 @@
     <section class="content-header">
       <h1>
         Ministry
-        <small>Adding ministry</small>
+        <small>Exclusão de ministério</small>
       </h1>
     </section>
 
@@ -17,25 +17,14 @@
         </v-alert>
         <form @submit="submitForm">
           <div class="box-body">
-            <div class="form-group col-md-6 col-lg-8">
-              <label for="description">Nome:</label>
-              <input type="text" class="form-control" id="name" v-model="name" placeholder="Nome">
-            </div>
-            <div class="form-group col-md-6 col-lg-4">
-              <label>Destinado à:</label>
-              <select class="form-control select2" id="gender" v-model="gender" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="gender">
-                <option value="null" selected>Todos</option>
-                <option value="male">Homens</option>
-                <option value="female">Mulheres</option>
-              </select>
-            </div>
             <div class="form-group col-md-12">
-              <label for="description">Descriçāo:</label>
-              <textarea class="form-control" id="description" v-model="description" rows="7" placeholder="Descriçāo"></textarea>
+              <p for="name">The following group will be permanently deleted. Deleted group data cannot be recovered.<br> Please, if you are sure, type "<b>{{ this.refenrece }}</b>" to confirm:</p>
+              <input type="text" class="form-control" id="name" v-model="name" placeholder="Nome">
             </div>
           </div>
           <div class="box-footer">
-            <button type="submit" class="btn btn-primary pull-right">Salvar</button>
+            <router-link class="btn btn-default" to="/ministry">Cancel</router-link>
+            <button type="submit" class="btn btn-danger pull-right" v-if="this.name === this.refenrece">Delete</button>
           </div>
         </form>
       </v-box>
@@ -44,6 +33,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data () {
     return {
@@ -53,23 +44,29 @@ export default {
         type: 'default',
         message: null
       },
+      id: null,
       name: null,
-      gender: null,
-      description: null
+      refenrece: ''
     }
   },
-  mounted () {
-    $(document).ready(() => {
-      $('.select2').select2().on('select2:select', function (e) {
-        $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
-      })
+  watch: {
+    ministry (val, original) {
+      this.id = val.id
+      this.refenrece = val.name
+    }
+  },
+  created () {
+    this.$store.dispatch('getMinistry', {
+      id: this.$route.params.id,
+      ministry_id: this.$route.params.ministry_id
     })
+  },
+  computed: {
+    ...mapState(['ministry'])
   },
   methods: {
     checkForm: function () {
-      this.gender = this.$refs.gender.dataset.value
-
-      if (this.name && this.description) {
+      if (this.name && this.name === this.refenrece) {
         return true
       }
 
@@ -77,15 +74,13 @@ export default {
 
       if (!this.name) {
         this.errors.push('Nome requerido.')
+      } else {
+        if (this.name !== this.refenrece) {
+          this.errors.push('The name does not match.')
+        }
       }
 
-      if (!this.description) {
-        this.errors.push('Descrição requerido.')
-      }
-
-      this.alert.title = 'Error!'
-      this.alert.type = 'danger'
-      this.alert.message = 'Errors were found. Please, solve them before proceed.'
+      return false
     },
     submitForm (e) {
       e.preventDefault()
@@ -94,19 +89,16 @@ export default {
         return
       }
 
-      const ministryData = {
-        name: this.name,
-        description: this.description,
-        gender: this.gender === 'null' ? null : this.gender,
-        coordinators: [1]
+      const groupData = {
+        id: this.id
       }
 
-      this.$store.dispatch('createMinistry', ministryData)
+      this.$store.dispatch('deleteMinistry', groupData)
         .then(response => {
           this.errors = []
           this.alert.title = 'Success!'
           this.alert.type = 'success'
-          this.alert.message = 'The ministry was included successfuly.'
+          this.alert.message = 'The ministry was deleted successfuly.'
         }).catch(error => {
           this.errors = []
 
@@ -137,7 +129,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-textarea {
-  resize: none;
-}
 </style>

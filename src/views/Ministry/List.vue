@@ -35,11 +35,13 @@ export default {
         },
         {
           data: 'description',
-          title: 'Descrição'
+          title: 'Descrição',
+          width: '50%'
         },
         {
-          data: 'coordinator',
-          title: 'Coordenador'
+          data: 'gender',
+          title: 'Destinado à',
+          className: 'table-cell-center'
         },
         {
           data: 'actions',
@@ -61,12 +63,25 @@ export default {
       let data = this.$store.getters.loadedMinistries
 
       data.forEach(el => {
+        let gender = '<span class="label label-default">Todos</span>'
+        switch (el.gender) {
+          case 'male':
+            gender = '<span class="label label-info">Homens</span>'
+            break
+          case 'female':
+            gender = '<span class="label label-info bg-maroon-active">Mulheres</span>'
+            break
+          default:
+            break
+        }
         result.push({
           id: el.id,
           name: el.name,
           description: el.description,
-          coordinator: el.coordinator,
-          actions: ''
+          gender: gender,
+          actions: `<span class="text-center btn-block"> \
+          <button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/ministry/${el.id}/edit">Edit</button>&nbsp; \
+          <button type="button" class="btn btn-sm btn-danger btn-dt" data-to="/ministry/${el.id}/delete">Delete</button></span>`
         })
       })
 
