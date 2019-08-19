@@ -261,6 +261,25 @@ export const store = new Vuex.Store({
           })
       })
     },
+    updateMinistry ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        const ministry = {
+          id: payload.id,
+          name: payload.name,
+          description: payload.description,
+          required_gender: payload.gender,
+          coordinators: payload.coordinators
+        }
+
+        axios.put(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.id}`, ministry)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
+    },
     createMember ({ commit, getters }, payload) {
       return new Promise((resolve, reject) => {
         const member = {

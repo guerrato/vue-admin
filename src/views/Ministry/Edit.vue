@@ -31,12 +31,7 @@
             </div>
             <div class="form-group col-md-12">
               <label>Coordenadores:</label>
-              <select class="form-control select2" id="coordinators" v-model="coordinators" multiple="multiple" style="width: 100%;" data-placeholder="Selecione..." ref="coordinators">
-                <option value="test" selected>Todos</option>
-                <option value="male">Homens</option>
-                <option value="female">Mulheres</option>
-                <option value="general">general</option>
-                <option value="nothing">nothing</option>
+              <select class="form-control select2" id="coordinators" v-model="coordinators" data-value="" multiple="multiple" style="width: 100%;" data-placeholder="Selecione..." ref="coordinators">
               </select>
             </div>
             <div class="form-group col-md-12">
@@ -82,12 +77,6 @@ export default {
         return value['id']
       })
 
-      // this.leader = val.leader_id
-
-      // this.$store.dispatch('getMember', {
-      //   id: this.leader
-      // })
-
       switch (this.gender) {
         case 'male':
           $('#gender').val(this.gender).trigger('change')
@@ -116,13 +105,12 @@ export default {
     }
   },
   mounted () {
-    // const self = this
     $(document).ready(() => {
       $('.select2').select2().on('select2:select', function (e) {
         $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
-        if ($(e.currentTarget).attr('id') === 'gender') {
-          // $('#leader').html('')
-          // self.getMembers({ gender: $(e.currentTarget).val() })
+      }).on('select2:unselect', function (e) {
+        if ($(e.currentTarget).attr('id') === 'coordinators') {
+          $(e.currentTarget).attr('data-value', $(e.currentTarget).val())
         }
       })
     })
@@ -139,10 +127,7 @@ export default {
   methods: {
     checkForm: function () {
       this.gender = this.$refs.gender.dataset.value
-
-      if (this.name && this.description) {
-        return true
-      }
+      this.coordinators = this.$refs.coordinators.dataset.value.split(',')
 
       this.errors = []
 
@@ -154,9 +139,19 @@ export default {
         this.errors.push('Descrição requerido.')
       }
 
+      if (this.coordinators.length === 0 || this.$refs.coordinators.dataset.value.length === 0) {
+        this.errors.push('Ao menos um Coordenador é requerido.')
+      }
+
+      if (this.errors.length === 0) {
+        return true
+      }
+
       this.alert.title = 'Error!'
       this.alert.type = 'danger'
       this.alert.message = 'Errors were found. Please, solve them before proceed.'
+
+      return false
     },
     submitForm (e) {
       e.preventDefault()
@@ -165,41 +160,42 @@ export default {
         return false
       }
 
-      // const ministryData = {
-      //   name: this.name,
-      //   description: this.description,
-      //   gender: this.gender === 'null' ? null : this.gender,
-      //   coordinators: [1]
-      // }
+      const ministryData = {
+        id: this.id,
+        name: this.name,
+        description: this.description,
+        gender: this.gender === 'null' ? null : this.gender,
+        coordinators: this.coordinators
+      }
 
-      // this.$store.dispatch('createMinistry', ministryData)
-      //   .then(response => {
-      //     this.errors = []
-      //     this.alert.title = 'Success!'
-      //     this.alert.type = 'success'
-      //     this.alert.message = 'The ministry was included successfuly.'
-      //   }).catch(error => {
-      //     this.errors = []
+      this.$store.dispatch('updateMinistry', ministryData)
+        .then(response => {
+          this.errors = []
+          this.alert.title = 'Success!'
+          this.alert.type = 'success'
+          this.alert.message = 'The ministry was updated successfuly.'
+        }).catch(error => {
+          this.errors = []
 
-      //     if ('data' in error) {
-      //       if ('message' in error.data) {
-      //         Object.keys(error.data.message).map(key => {
-      //           error.data.message[key].map(err => {
-      //             this.errors.push(err)
-      //           })
-      //         })
-      //       }
-      //     }
+          if ('data' in error) {
+            if ('message' in error.data) {
+              Object.keys(error.data.message).map(key => {
+                error.data.message[key].map(err => {
+                  this.errors.push(err)
+                })
+              })
+            }
+          }
 
-      //     this.alert.title = 'Error!'
-      //     this.alert.type = 'danger'
+          this.alert.title = 'Error!'
+          this.alert.type = 'danger'
 
-      //     if (this.errors.length) {
-      //       this.alert.message = 'Errors were found. Please, solve them before proceed.'
-      //     } else {
-      //       this.alert.message = 'Errors were found. Please, try later.'
-      //     }
-      //   })
+          if (this.errors.length) {
+            this.alert.message = 'Errors were found. Please, solve them before proceed.'
+          } else {
+            this.alert.message = 'Errors were found. Please, try later.'
+          }
+        })
       // this.$router.push('/member')
     },
     handleForm () {
@@ -209,6 +205,7 @@ export default {
         self.stored_members.forEach((el) => {
           $('#coordinators').append(new Option(el.name, el.id, false, false)).val(-1).trigger('select')
         })
+        $('#coordinators').attr('data-value', self.coordinators)
         $('#coordinators').val(self.coordinators).trigger('change')
       })
     }
