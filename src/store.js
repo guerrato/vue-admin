@@ -208,7 +208,7 @@ export const store = new Vuex.Store({
               id: item.id,
               name: item.name,
               description: item.description,
-              required_gender: item.gender
+              gender: item.required_gender
             })
           })
 
