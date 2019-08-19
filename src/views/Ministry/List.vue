@@ -80,7 +80,6 @@ export default {
           description: el.description,
           gender: gender,
           actions: `<span class="text-center btn-block"> \
-          <button type="button" class="btn btn-sm btn-default btn-dt" data-to="/ministry/${el.id}/coordinators">Coordinators</button>&nbsp; \
           <button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/ministry/${el.id}/edit">Edit</button>&nbsp; \
           <button type="button" class="btn btn-sm btn-danger btn-dt" data-to="/ministry/${el.id}/delete">Delete</button></span>`
         })

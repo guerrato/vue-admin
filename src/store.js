@@ -280,6 +280,18 @@ export const store = new Vuex.Store({
           })
       })
     },
+    deleteMinistry ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        axios.delete(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${payload.id}`)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            console.log(error.response)
+            reject(error.response)
+          })
+      })
+    },
     createMember ({ commit, getters }, payload) {
       return new Promise((resolve, reject) => {
         const member = {

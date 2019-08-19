@@ -8,6 +8,7 @@ import DeleteMember from '@/views/Member/Delete'
 import ListMinistry from '@/views/Ministry/List'
 import CreateMinistry from '@/views/Ministry/Create'
 import EditMinistry from '@/views/Ministry/Edit'
+import DeleteMinistry from '@/views/Ministry/Delete'
 import ListGroup from '@/views/Group/List'
 import CreateGroup from '@/views/Group/Create'
 import EditGroup from '@/views/Group/Edit'
@@ -61,6 +62,12 @@ export default new Router({
       path: '/ministry/:id/edit',
       name: 'EditMinistry',
       component: EditMinistry
+    },
+    {
+      path: '/ministry/:id/delete',
+      props: true,
+      name: 'DeleteMinistry',
+      component: DeleteMinistry
     },
     {
       path: '/group',
