@@ -8,14 +8,33 @@
     </section>
 
     <section class="content">
-      <v-box>
-        <div class="row form-group">
-          <div class="col-xs-2">
-            <router-link class="btn btn-primary" to="/member/create">Adicionar Novo</router-link>
-          </div>
+     <div class="row">
+        <div class="col-lg-3">
+          <v-box>
+            <div class="box-body">
+              <div class="form-group">
+                <label for="ministry">Ministérios:</label>
+                <select class="form-control select2" id="ministry" v-model="ministry" data-value="" style="width: 100%;" data-placeholder="Selecione..." ref="ministry">
+                  <option value="all" selected>Todos</option>
+                  <option v-for="m in ministries" v-bind:key="m.id" v-bind:value="m.id">
+                    {{ m.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </v-box>
         </div>
-        <v-table id="dtmembers" :columns="columns" :rows="members" :options="options"></v-table>
-      </v-box>
+        <div class="col-lg-9">
+          <v-box class="col-md-8">
+            <div class="row form-group">
+              <div class="col-xs-2">
+                <router-link class="btn btn-primary" to="/member/create">Adicionar Novo</router-link>
+              </div>
+            </div>
+            <v-table id="dtmembers" :columns="columns" :rows="members" :options="options"></v-table>
+          </v-box>
+        </div>
+     </div>
     </section>
   </div>
 </template>
@@ -24,14 +43,17 @@
 export default {
   data () {
     return {
+      ministry: 'all',
       columns: [
         {
           data: 'id',
-          title: 'ID'
+          title: 'ID',
+          width: '5%'
         },
         {
           data: 'name',
-          title: 'Nome'
+          title: 'Nome',
+          width: '50%'
         },
         {
           data: 'nickname',
@@ -53,16 +75,51 @@ export default {
       }
     }
   },
+  mounted () {
+    const self = this
+    $(document).ready(() => {
+      $('.select2').select2().on('select2:select', function (e) {
+        let selected = $(e.currentTarget).val()
+        $(e.currentTarget).attr('data-value', selected)
+        if (selected !== self.ministry) {
+          console.log(selected)
+          if (selected === 'all') {
+            self.$store.dispatch('loadMembers', { filter: 'all' })
+          } else {
+            self.$store.dispatch('loadMembers', { filter: Math.abs(Number.parseInt(selected)) })
+          }
+        }
+        self.ministry = selected
+      })
+    })
+  },
   created () {
-    return this.$store.dispatch('loadMembers')
+    this.$store.dispatch('loadMinistries')
+    this.$store.dispatch('loadMembers', { filter: 'all' })
+  },
+  computed: {
+    members () {
+      return this.handleDt()
+    },
+    ministries () {
+      let result = []
+      let data = this.$store.getters.loadedMinistries
+
+      data.forEach(el => {
+        result.push({
+          id: el.id,
+          name: el.name
+        })
+      })
+
+      return result
+    }
   },
   methods: {
     redirect (url) {
       console.log(url)
-    }
-  },
-  computed: {
-    members () {
+    },
+    handleDt () {
       let result = []
       let data = this.$store.getters.loadedMembers
 
