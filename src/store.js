@@ -55,8 +55,21 @@ export const store = new Vuex.Store({
 
   },
   actions: {
-    loadMembers ({ commit }) {
-      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member`)
+    loadMembers ({ commit }, payload) {
+      if (payload === undefined) {
+        payload = {}
+      }
+
+      if (!payload.hasOwnProperty('filter')) {
+        payload.filter = 'all'
+      }
+      let ministry = payload.filter === 'all' ? 0 : payload.filter
+
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${ministry}/member`, {
+        params: {
+          no_filter: payload.filter === 'all'
+        }
+      })
         .then((response) => {
           const members = []
           const obj = response.data.data
