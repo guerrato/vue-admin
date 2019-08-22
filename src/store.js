@@ -56,6 +56,13 @@ export const store = new Vuex.Store({
   },
   actions: {
     loadMembers ({ commit }, payload) {
+      if (payload === undefined) {
+        payload = {}
+      }
+
+      if (!payload.hasOwnProperty('filter')) {
+        payload.filter = 'all'
+      }
       let ministry = payload.filter === 'all' ? 0 : payload.filter
 
       axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/${ministry}/member`, {

@@ -82,7 +82,6 @@ export default {
         let selected = $(e.currentTarget).val()
         $(e.currentTarget).attr('data-value', selected)
         if (selected !== self.ministry) {
-          console.log(selected)
           if (selected === 'all') {
             self.$store.dispatch('loadMembers', { filter: 'all' })
           } else {
