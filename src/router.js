@@ -15,6 +15,7 @@ import CreateGroup from '@/views/Group/Create'
 import EditGroup from '@/views/Group/Edit'
 import DeleteGroup from '@/views/Group/Delete'
 import GroupMember from '@/views/Group/Member'
+import HelpSearchMember from '@/views/Help/SearchMember'
 
 Vue.use(Router)
 
@@ -100,6 +101,11 @@ export default new Router({
       path: '/group/:ministry_id/:id/member',
       name: 'GroupMember',
       component: GroupMember
+    },
+    {
+      path: '/help/searchmember',
+      name: 'HelpSearchMember',
+      component: HelpSearchMember
     }
   ]
 })

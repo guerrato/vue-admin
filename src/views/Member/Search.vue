@@ -3,17 +3,19 @@
     <section class="content-header">
       <h1>
         Members
-        <small>Novo membro - Busca Primária</small>
+        <small>Novo membro - Busca prévia</small>
       </h1>
     </section>
 
     <section class="content">
+      <div class="callout callout-warning">
+        <h4>Antes de Adicionar...</h4>
+        Antes de incluir um novo membro, certifique-se que da existência do cadastro através da pesquisa pelo <strong>Nome</strong> ou <strong>Apelido</strong>. <br><br>
+        <router-link to="/help/searchmember">Para saber mais da importância dessa etapa, clique aqui.</router-link>
+      </div>
       <div class="row">
         <div class="col-md-12">
           <v-box>
-            <p class="lead">
-              Antes de incluir um novo membro, primeiro pesquise o nome ou apelido dele para ter certeza que ele não foi cadastrado ainda.
-            </p>
             <label for="search">Nome ou Apelido:</label>
             <div class="input-group">
               <input type="text" class="form-control" id="search" v-model="search" placeholder="Membro" @keyup="getParameter()" @change="getParameter()"/>
@@ -123,7 +125,7 @@ export default {
           name: el.name,
           nickname: el.nickname,
           percentage: el.percentage,
-          actions: `<span class="text-center btn-block"><button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/member/edit/${el.id}">Edit</button></span>`
+          actions: `<span class="text-center btn-block"><button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/member/edit/${el.id}">Mais Informações</button></span>`
         })
       })
 
