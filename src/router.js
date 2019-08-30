@@ -5,6 +5,7 @@ import ListMember from '@/views/Member/List'
 import CreateMember from '@/views/Member/Create'
 import EditMember from '@/views/Member/Edit'
 import DeleteMember from '@/views/Member/Delete'
+import SearchMember from '@/views/Member/Search'
 import ListMinistry from '@/views/Ministry/List'
 import CreateMinistry from '@/views/Ministry/Create'
 import EditMinistry from '@/views/Ministry/Edit'
@@ -47,6 +48,11 @@ export default new Router({
       props: true,
       name: 'DeleteMember',
       component: DeleteMember
+    },
+    {
+      path: '/member/search',
+      name: 'SearchMember',
+      component: SearchMember
     },
     {
       path: '/ministry',

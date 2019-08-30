@@ -9,6 +9,7 @@ export const store = new Vuex.Store({
     member_roles: [],
     member_status: [],
     members: [],
+    searched_members: [],
     members_not_allocated: [],
     group_members: [],
     member: null,
@@ -27,6 +28,9 @@ export const store = new Vuex.Store({
     },
     setLoadedMembers (state, payload) {
       state.members = payload
+    },
+    setSearchedMembers (state, payload) {
+      state.searched_members = payload
     },
     setGottenMember (state, payload) {
       state.member = payload
@@ -121,6 +125,40 @@ export const store = new Vuex.Store({
           }
 
           commit('setGottenMember', member)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    searchMembers ({ commit }, payload) {
+      axios.get(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/0/member/similarsearch`, {
+        params: {
+          q: payload.query
+        }
+      })
+        .then((response) => {
+          const members = []
+          const obj = response.data.data.members
+
+          obj.forEach(item => {
+            members.push({
+              id: item.id,
+              name: item.name,
+              email: item.email,
+              nickname: item.nickname,
+              birthdate: item.birthdate,
+              gender: item.gender,
+              phone: item.phone,
+              whatsapp: item.whatsapp,
+              facebook: item.facebook,
+              role: item.role,
+              status: item.status,
+              image: item.image,
+              image_name: item.image_name
+            })
+          })
+
+          commit('setSearchedMembers', members)
         })
         .catch((error) => {
           console.log(error)
@@ -498,6 +536,9 @@ export const store = new Vuex.Store({
       return state.members.sort((memberA, memberB) => {
         return memberA.id > memberB.id
       })
+    },
+    searchedMbers (state) {
+      return state.searched_members
     },
     gottenMember (state) {
       return state.member
