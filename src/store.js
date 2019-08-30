@@ -138,23 +138,14 @@ export const store = new Vuex.Store({
       })
         .then((response) => {
           const members = []
-          const obj = response.data.data.members
+          const obj = response.data.data
 
           obj.forEach(item => {
             members.push({
               id: item.id,
               name: item.name,
-              email: item.email,
               nickname: item.nickname,
-              birthdate: item.birthdate,
-              gender: item.gender,
-              phone: item.phone,
-              whatsapp: item.whatsapp,
-              facebook: item.facebook,
-              role: item.role,
-              status: item.status,
-              image: item.image,
-              image_name: item.image_name
+              percentage: item.percentage
             })
           })
 

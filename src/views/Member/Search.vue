@@ -62,6 +62,15 @@ export default {
           orderable: false
         },
         {
+          data: 'percentage',
+          title: 'percentage',
+          visible: false,
+          orderable: false,
+          // sortable: true,
+          searchable: false,
+          type: 'num'
+        },
+        {
           data: 'actions',
           title: '',
           orderable: false
@@ -73,7 +82,8 @@ export default {
         lengthChange: true,
         ordering: true,
         info: true,
-        autoWidth: true
+        autoWidth: true,
+        order: [[ 3, 'desc' ]]
       }
     }
   },
@@ -112,6 +122,7 @@ export default {
           id: el.id,
           name: el.name,
           nickname: el.nickname,
+          percentage: el.percentage,
           actions: `<span class="text-center btn-block"><button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/member/edit/${el.id}">Edit</button></span>`
         })
       })
