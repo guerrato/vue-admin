@@ -5,6 +5,7 @@ import ListMember from '@/views/Member/List'
 import CreateMember from '@/views/Member/Create'
 import EditMember from '@/views/Member/Edit'
 import DeleteMember from '@/views/Member/Delete'
+import SearchMember from '@/views/Member/Search'
 import ListMinistry from '@/views/Ministry/List'
 import CreateMinistry from '@/views/Ministry/Create'
 import EditMinistry from '@/views/Ministry/Edit'
@@ -14,6 +15,7 @@ import CreateGroup from '@/views/Group/Create'
 import EditGroup from '@/views/Group/Edit'
 import DeleteGroup from '@/views/Group/Delete'
 import GroupMember from '@/views/Group/Member'
+import HelpSearchMember from '@/views/Help/SearchMember'
 
 Vue.use(Router)
 
@@ -47,6 +49,11 @@ export default new Router({
       props: true,
       name: 'DeleteMember',
       component: DeleteMember
+    },
+    {
+      path: '/member/search',
+      name: 'SearchMember',
+      component: SearchMember
     },
     {
       path: '/ministry',
@@ -94,6 +101,11 @@ export default new Router({
       path: '/group/:ministry_id/:id/member',
       name: 'GroupMember',
       component: GroupMember
+    },
+    {
+      path: '/help/searchmember',
+      name: 'HelpSearchMember',
+      component: HelpSearchMember
     }
   ]
 })
