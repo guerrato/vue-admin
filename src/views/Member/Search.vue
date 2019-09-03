@@ -34,6 +34,9 @@
           </v-box>
         </div>
       </div>
+      <v-modal id="search-modal" :modalTitle="modalTitle" :modalLinkText="modalLinkText" :modalLink="modalLink" v-if="showModal" @close="showModal = false">
+        <v-member :id="selectedMember"></v-member>
+      </v-modal>
     </section>
   </div>
 </template>
@@ -86,7 +89,12 @@ export default {
         info: true,
         autoWidth: true,
         order: [[ 3, 'desc' ]]
-      }
+      },
+      showModal: false,
+      modalLink: '',
+      modalLinkText: 'Adicionar Este',
+      modalTitle: '',
+      selectedMember: null
     }
   },
   computed: {
@@ -94,10 +102,14 @@ export default {
       return this.handleDt()
     }
   },
+  mounted () {
+    const self = this
+    $(document).on('click', '.btn-dt-modal', function (e) {
+      self.showModal = true
+      self.selectedMember = $(this).data('member-id')
+    })
+  },
   methods: {
-    redirect (url) {
-      console.log(url)
-    },
     searchMembers () {
       if (!this.search || this.search === null) {
         return false
@@ -125,7 +137,7 @@ export default {
           name: el.name,
           nickname: el.nickname,
           percentage: el.percentage,
-          actions: `<span class="text-center btn-block"><button type="button" class="btn btn-sm btn-primary btn-dt" data-to="/member/edit/${el.id}">Mais Informações</button></span>`
+          actions: `<span class="text-center btn-block"><button type="button" class="btn btn-sm btn-primary btn-dt-modal" data-member-id="${el.id}" data-member-name="${el.name}">Mais Informações</button></span>`
         })
       })
 
