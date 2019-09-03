@@ -34,7 +34,9 @@
           </v-box>
         </div>
       </div>
-      <v-modal id="search-modal" :modalTitle="modalTitle" :modalLinkText="modalLinkText" :modalLink="modalLink" v-if="showModal" @close="showModal = false"></v-modal>
+      <v-modal id="search-modal" :modalTitle="modalTitle" :modalLinkText="modalLinkText" :modalLink="modalLink" v-if="showModal" @close="showModal = false">
+        <v-member :id="selectedMember"></v-member>
+      </v-modal>
     </section>
   </div>
 </template>
@@ -43,7 +45,7 @@
 export default {
   data () {
     return {
-      search: '',
+      search: null,
       lastSearch: '',
       debounceTimeout: null,
       columns: [
@@ -89,9 +91,10 @@ export default {
         order: [[ 3, 'desc' ]]
       },
       showModal: false,
-      modalLink: '/member/create',
+      modalLink: '',
       modalLinkText: 'Adicionar Este',
-      modalTitle: ''
+      modalTitle: '',
+      selectedMember: null
     }
   },
   computed: {
@@ -101,9 +104,9 @@ export default {
   },
   mounted () {
     const self = this
-    $(document).on('click', '.btn-dt-modal', function () {
+    $(document).on('click', '.btn-dt-modal', function (e) {
       self.showModal = true
-      self.modalTitle = $('.btn-dt-modal').data('member-name')
+      self.selectedMember = $(this).data('member-id')
     })
   },
   methods: {

@@ -13,6 +13,7 @@ import Alert from './components/Alert'
 import Table from './components/Table'
 import Crop from './components/Crop'
 import Modal from './components/Modal'
+import MemberDetails from './components/MemberDetails'
 
 Vue.config.productionTip = false
 
@@ -23,6 +24,7 @@ Vue.component('croppa', Croppa.component)
 Vue.component('v-draggable', Draggable)
 Vue.component('v-crop', Crop)
 Vue.component('v-modal', Modal)
+Vue.component('v-member', MemberDetails)
 
 new Vue({
   router,

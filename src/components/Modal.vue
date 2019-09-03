@@ -1,20 +1,22 @@
 <template>
   <div class="v-modal" :id="id">
-    <div class="v-modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" aria-label="Close" @click="$emit('close')">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <h4 class="modal-title">{{ modalTitle }}</h4>
-        </div>
-        <div class="modal-body">
-          <slot>
-          </slot>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" @click="$emit('close')">Close</button>
-          <button type="button" class="btn btn-primary" @click="redirect()">{{ modalLinkText }}</button>
+    <div class="dialog-wrap">
+      <div class="v-modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header" v-if="modalTitle && modalTitle.trim() !== '' && modalTitle !== null">
+            <button type="button" class="close" aria-label="Close" @click="$emit('close')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">{{ modalTitle }}</h4>
+          </div>
+          <div class="modal-body">
+            <slot>
+            </slot>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" @click="$emit('close')">Close</button>
+            <button type="button" class="btn btn-primary" @click="redirect()">{{ modalLinkText }}</button>
+          </div>
         </div>
       </div>
     </div>
@@ -60,16 +62,31 @@ export default {
     outline: 0;
     background: rgba(0,0,0,0.3);
 
-    .v-modal-dialog {
-      position: relative;
+    .dialog-wrap {
+      display: block;
       width: auto;
+      height: 100%;
       margin: 10px;
+
+      .v-modal-dialog {
+        position: relative;
+        width: auto;
+      }
     }
 
     @media (min-width: 768px) {
-      .v-modal-dialog {
-        width: 600px;
-        margin: 30px auto;
+      .dialog-wrap {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+
+        .v-modal-dialog {
+          width: 600px;
+          min-width: 600px;
+          margin: 0 0;
+        }
       }
     }
   }
