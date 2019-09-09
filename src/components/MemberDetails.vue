@@ -1,7 +1,6 @@
 <template>
   <div class="member-details" :id="id">
     <div class="row">
-      <!-- <div class="box box-widget bg-navy widget-user-2"> -->
       <div class="member-head bg-navy">
         <img :src="this.image === null ? '/img/default-50x50.gif' : this.image" width="128" height="128" alt="User Avatar">
         <div class="member-name">
@@ -75,9 +74,6 @@ export default {
   },
   computed: {
     ...mapState(['member'])
-  },
-  methods: {
-
   }
 }
 </script>

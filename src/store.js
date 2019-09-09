@@ -398,6 +398,21 @@ export const store = new Vuex.Store({
           })
       })
     },
+    addMemberInMinistry ({ commit, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        const member = {
+          role_id: payload.role_id
+        }
+
+        axios.put(`${process.env.VUE_APP_IRONHAND_BASE_URL}/api/ministry/1/member/${payload.id}/addmemberinministry`, member)
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error.response)
+          })
+      })
+    },
     deleteMember ({ commit, getters }, payload) {
       return new Promise((resolve, reject) => {
         const member = {
