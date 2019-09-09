@@ -79,6 +79,7 @@
             </div>
           </div>
           <div class="box-footer">
+            <router-link class="btn btn-default" to="/member">Voltar</router-link>
             <button type="submit" class="btn btn-primary pull-right">Salvar</button>
           </div>
         </form>
