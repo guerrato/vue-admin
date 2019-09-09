@@ -27,10 +27,14 @@
           </v-box>
         </div>
       </div>
-      <div class="row">
+      <div v-if="this.search !== null" class="row">
         <div class="col-md-12">
           <v-box>
             <v-table id="dtmembers" :columns="columns" :rows="searched_members" :options="options"></v-table>
+            <div class="box-footer">
+              <router-link class="btn btn-default" to="/member">Voltar</router-link>
+              <router-link class="btn btn-primary pull-right" to="/member/create">Adicionar um novo</router-link>
+            </div>
           </v-box>
         </div>
       </div>
@@ -106,12 +110,14 @@ export default {
     const self = this
     $(document).on('click', '.btn-dt-modal', function (e) {
       self.showModal = true
+      self.modalLink = `/member/role/${$(this).data('member-id')}`
       self.selectedMember = $(this).data('member-id')
     })
   },
   methods: {
     searchMembers () {
       if (!this.search || this.search === null) {
+        this.search = null
         return false
       }
 
